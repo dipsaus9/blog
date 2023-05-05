@@ -2,7 +2,7 @@
 
 Design systems have become more popular in recent years. However, there is still much to learn about how design systems can be used to their full potential, and how organizations can benefit from them with the right tools. A well-designed design system can significantly improve an organization's design workflow, efficiency, and consistency, ultimately leading to better user experiences.
 
-The exact meaning of a design system differs among the web. According to the Niels Norman group (<https://www.nngroup.com/>), a design system is a set of standards to manage design at scale by reducing redundancy while creating a shared language and visual consistency across different pages and channels. These standards - or what I rather call an alignment - for your brand isn’t something new. Designers and developers have been aligning with multiple systems and tools for as long as styling your website in HTML tables was the standard. But over the years we developed better tools to do this. It is important to recognize that a design “system” is more than just a component library.
+The exact meaning of a design system differs among the web. According to the [Niels Norman group](https://www.nngroup.com/), a design system is a set of standards to manage design at scale by reducing redundancy while creating a shared language and visual consistency across different pages and channels. These standards - or what I rather call an alignment - for your brand isn’t something new. Designers and developers have been aligning with multiple systems and tools for as long as styling your website in HTML tables was the standard. But over the years we developed better tools to do this. It is important to recognize that a design “system” is more than just a component library.
 
 Design systems are made of many components, patterns, styles, and guidelines, which can help optimize your design efforts. A Design system should at least have the following items:
 
@@ -24,7 +24,9 @@ With the rise of design systems, there has been a growing need for tools that ca
 
 ### Naming your tokens
 
-Giving effective names to your design tokens might take some effort. It should be a team effort to create a shared understanding of your visual style through design, code and other handoffs. A team should be able to recognize and recall the purposeful decision they made behind each token. Not just in code and documentation, but in design tools as well. For Intergamma we got inspiration from a great article (<https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676>) written by Nathan Curtis.
+Giving effective names to your design tokens might take some effort. It should be a team effort to create a shared understanding of your visual style through design, code and other handoffs. A team should be able to recognize and recall the purposeful decision they made behind each token. Not just in code and documentation, but in design tools as well. I got some great inspiration from a [article](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676) written by Nathan Curtis.
+
+![Naming conventions can be hard](images/building-a-design-system-that-scales-with-your-organization/naming-conventions.jpeg)
 
 Design properties like color can be stored as regular variables.
 
@@ -92,15 +94,185 @@ The last layer is the state token. A state token is used when there is a state c
 $colors-background-button-primary-hover = $blue-400;
 ```
 
-### Button Example
+These tokens are called alias tokens. They all rely on a base set of tokens, in this example `$blue-400`. This makes it easier to change the base token and have all the alias tokens change with it. This is a great way to create a consistent design system.
 
-When following this naming convention, we can create a button component. To know which tokens we need, we can use the HTML border syntax. This syntax helps us to create a consistent way to create new components.
+## Putting your tokens to the test
 
-[![HTML border syntax]()
+A simple yet efficient way to implement your design tokens is by using the atomic design methodology. Atomic design is a methodology composed of five distinct stages working together to create interface design systems in a more deliberate and hierarchical manner. The five stages of atomic design are:
 
-Following the border box
+- Atoms
+- Molecules
+- Organisms
+- Templates
+- Pages
 
-## Implementing your design tokens
+By using this system we can start with smaller components and build them up to larger components. This helps us to create a consistent way to create new components. This also helps to get used to the new way of working. Let’s take a look at how we can use this to create a button component.
+
+### Button example
+
+For this example we assume we already defined our primary tokens, like colors, typography and spacing. We can use these tokens to create our button component. Let’s take a look at how we can use this methodology to create a button component:
+
+```scss
+$blue-400 = #1B60DB;
+$white = #FFFFFF;
+$black = #000000;
+$font-size-base = 16px;
+$font-weight-normal = 400;
+$font-family-base = 'Roboto', sans-serif;
+$spacing-1 = 4px;
+$spacing-2 = 8px;
+$spacing-3 = 16px;
+$border-radius-base = 4px;
+$border-width-base = 1px;
+$box-shadow-base = 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+$box-shadow-none = 0 0px 0px 0 rgba(0, 0, 0, 0.0);
+// etc...
+```
+
+I have created a simple button in Figma
+
+![Button example](images/building-a-design-system-that-scales-with-your-organization/button-example.jpg)
+
+The button atom consists of multiple properties. Even though the atom is not complex there are a lot of properties that we can use to style the button. Let's list all the properties that we can use to style the button:
+
+- border-width
+- border-color
+- border-radius
+- background-color
+- box-shadow
+- font-size
+- font-weight
+- font-family
+- color
+- padding
+- margin
+
+If we follow the naming convention mentioned earlier we create a lot of alias tokens. Let's define these properties in a `scss` file:
+
+```scss
+// Borders
+$border-width-button = $border-width-base;
+$border-color-button = $black;
+$border-radius-button = $border-radius-base;
+// Background
+$background-color-button = $white;
+// Box shadow
+$box-shadow-button = $box-shadow-none;
+// Typography
+$font-size-button = $font-size-base;
+$font-weight-button = $font-weight-normal;
+$font-family-button = $font-family-base;
+$color-button = $black;
+// Spacing
+$padding-button = $spacing-2 $spacing-3;
+$margin = 0;
+```
+
+Now let's see what happens if we add variants and state to the buttons.
+
+![Button example](images/building-a-design-system-that-scales-with-your-organization/buttons.jpg)
+
+We now have two button variants, primary and secondary. We also have two button states, default and hover. Let’s take a look at the alias tokens we can create for the button molecule.
+
+```scss
+// Borders
+$border-width-button-primary = $border-width-base;
+$border-color-button-primary = $black;
+$border-radius-button-primary = $border-radius-base;
+$border-width-button-secondary = $border-width-base;
+$border-color-button-secondary = $blue-400;
+$border-radius-button-secondary = $border-radius-base;
+// Background
+$background-color-button-primary = $white;
+$background-color-button-secondary = $blue-400;
+// Box shadow
+$box-shadow-button-primary = $box-shadow-none;
+$box-shadow-button-secondary = $box-shadow-none;
+// Typography
+$font-size-button-primary = $font-size-base;
+$font-weight-button-primary = $font-weight-normal;
+$font-family-button-primary = $font-family-base;
+$color-button-primary = $black;
+$font-size-button-secondary = $font-size-base;
+$font-weight-button-secondary = $font-weight-normal;
+$font-family-button-secondary = $font-family-base;
+$color-button-secondary = $white;
+// Spacing
+$padding-button-primary = $spacing-2 $spacing-3;
+$margin-button-primary = 0;
+$padding-button-secondary = $spacing-2 $spacing-3;
+$margin-button-secondary = 0;
+```
+
+### Adding state
+
+As we have seen in the button example, we can add state to our components. For example, a button can have a hover state. We can add this state to our button component.
+
+```scss
+// Borders
+$border-width-button-primary-hover = $border-width-base;
+$border-color-button-primary-hover = $black;
+$border-radius-button-primary-hover = $border-radius-base;
+$border-width-button-secondary-hover = $border-width-base;
+$border-color-button-secondary-hover = $blue-400;
+$border-radius-button-secondary-hover = $border-radius-base;
+// Background
+$background-color-button-primary-hover = $white;
+$background-color-button-secondary-hover = $blue-400;
+// Box shadow
+$box-shadow-button-primary-hover = $box-shadow-base;
+$box-shadow-button-secondary-hover = $box-shadow-base;
+// Typography
+$font-size-button-primary-hover = $font-size-base;
+$font-weight-button-primary-hover = $font-weight-normal;
+$font-family-button-primary-hover = $font-family-base;
+$color-button-primary-hover = $black;
+$font-size-button-secondary-hover = $font-size-base;
+$font-weight-button-secondary-hover = $font-weight-normal;
+$font-family-button-secondary-hover = $font-family-base;
+$color-button-secondary-hover = $white;
+// Spacing
+$padding-button-primary-hover = $spacing-2 $spacing-3;
+$margin-button-primary-hover = 0;
+$padding-button-secondary-hover = $spacing-2 $spacing-3;
+$margin-button-secondary-hover = 0;
+```
+
+As you can see, we have a lot of alias tokens. This is just for one button component. Imagine how many alias tokens we have for a complete design system. This is why it is important to create a naming convention.
+
+### Reducing the number of tokens
+
+As your design systems keeps on growing it is important to keep track of your tokens. As we have seen in the button example, we have a lot of alias tokens. This is just for one button component. Reducing the amount of tokens is not an easy task. The example button component I created has a lot of duplicate tokens. For example, the hover state only changes the box shadow. We can reduce the amount of tokens by creating a box shadow token for the button component. Let's remove all the duplicate tokens from the button component:
+
+```scss
+// Borders
+$border-width-button = $border-width-base;
+$border-color-button-primary = $black;
+$border-color-button-secondary = $blue-400;
+$border-radius-button = $border-radius-base;
+// Background
+$background-color-button-primary = $white;
+$background-color-button-secondary = $blue-400;
+// Box shadow
+$box-shadow-button = $box-shadow-none;
+$box-shadow-button-primary-hover = $box-shadow-base;
+$box-shadow-button-secondary-hover = $box-shadow-base;
+// Typography
+$font-size-button = $font-size-base;
+$font-weight-button = $font-weight-normal;
+$font-family-button = $font-family-base;
+$color-button-primary = $black;
+$color-button-secondary = $white;
+// Spacing
+$padding-button = $spacing-2 $spacing-3;
+$margin-button = 0;
+```
+
+Combining tokens can be a risk. In my experience though it is best to keep the amount of alias tokens to a minimum. Adding state or variants to tokens in a later stage is a lot easier then removing duplicate tokens as you might not know where they are used. Before implementing a new atom it is best to think ahead. What are the different states of this atom? What are the different variants of this atom? This will help you to reduce the amount of tokens. When following this naming convention it is best to look at the HTML border syntax. This syntax helps us to create a consistent way to create new components. It also helps us to reduce the amount of tokens. Let's take a look at the HTML border syntax:
+
+![HTML box model](/images/building-a-design-system-that-scales-with-your-organization/box-model.png)
+
+## Translating your tokens to code
 
 Until this point, we have discussed the importance of design tokens and how they can help us to create a design system, but how do we implement them in our code? As we connected our design tokens to GitHub, we can use the same tokens in our code. As design tokens are just variables, created in a JSON file, we can implement them in any programming language. We can use [style-dictionary](https://amzn.github.io/style-dictionary/#/) to convert our design tokens to any platform we want. The design tokens are the single source of truth. From there we can generate our code to each platform we want for your organization. We want to use the same tokens in our CSS, JavaScript, Android, iOS, and other platforms. This helps us to create a consistent way to share design tokens across platforms. Their motto is: define styles once, use them everywhere. Let's take a look at how we can use style-dictionary to generate our design tokens (JSON files) to usable CSS for example.
 
@@ -171,17 +343,8 @@ StyleDictionary.registerTransform({
 
 If you want to learn more about style dictionary, I recommend you to check out their [documentation](https://amzn.github.io/style-dictionary/#/). Keep in mind that style dictionary parses all files recursively in the source folder. This means that you can split your tokens into multiple files. For example, you can split your tokens into a `color.json`, `spacing.json`, `typography.json`, and `border.json` file. This makes it easier to maintain your tokens.
 
-Next topcis:
-Design system
-Design tokens
-Figma tokens
-style-dictionary
-Custom templates
-Tailwind theming
-ESLint
-Mission accomplished
+## Conclusion
 
-<https://www.nngroup.com/articles/design-systems-101/>
-<https://xd.adobe.com/ideas/principles/design-systems/what-are-design-tokens/>
-<https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676>
-<https://www.reddit.com/r/ProgrammerHumor/comments/dwmwvj/naming_things_is_hard/>
+Setting up a design system for your organization can be a daunting task. But by following the right steps, you can create a design system that scales with your organization. It is important to think ahead and keep reevaluating your system. Design tokens can help you to create a consistent way to share design across platforms. They can also help you to create a consistent way to share design tokens across platforms. This helps you to create a single source of truth for your design system. This single source of truth can be used to generate code for each platform you want.
+
+A design system should be a new way of working to your organization. This does not mean you should change your way of working overnight. It is important to take small steps and keep reevaluating your system. This helps you to keep your system up to date and relevant. Keep it simple in the beginning but keep in mind that your system should be able to scale with your organization. It is important to think ahead and keep reevaluating your system. The most important step in creating a design system is communication and documentation.
