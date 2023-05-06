@@ -1,14 +1,14 @@
-# Building a Design System that Scales with Your Organization: Tips and Tricks
+# Building a design system that Scales with Your Organization: Tips and Tricks
 
 Design systems have become more popular in recent years. However, there is still much to learn about how design systems can be used to their full potential, and how organizations can benefit from them with the right tools. A well-designed design system can significantly improve an organization's design workflow, efficiency, and consistency, ultimately leading to better user experiences.
 
 The exact meaning of a design system differs among the web. According to the [Niels Norman group](https://www.nngroup.com/), a design system is a set of standards to manage design at scale by reducing redundancy while creating a shared language and visual consistency across different pages and channels. These standards - or what I rather call an alignment - for your brand isn’t something new. Designers and developers have been aligning with multiple systems and tools for as long as styling your website in HTML tables was the standard. But over the years we developed better tools to do this. It is important to recognize that a design “system” is more than just a component library.
 
-Design systems are made of many components, patterns, styles, and guidelines, which can help optimize your design efforts. A Design system should at least have the following items:
+Design systems are made of many components, patterns, styles, and guidelines, which can help optimize your design efforts. A design system should at least have the following items:
 
-- **Brand language and identity**, containing implementation guidelines, visual references, and design principles for creating interfaces
-- **Reusable components**, the LEGO blocks that are built out of all the other parts covered above. A component should have a name, description, attribute, state, code snippet and implementation for developers
-- **Patterns**, are the building instructions that you need to use the components effectively across all your products
+- **Brand language and identity**, containing implementation guidelines, visual references, and design principles for creating interfaces.
+- **Reusable components**, modular components that can be used across different applications or interfaces. A component should have a name, description, attribute, state, code snippet and implementation for developers.
+- **Patterns**, are the building instructions that you need to use the components effectively across all your products.
 
 However, they are designed, managed, and implemented by people. This means that a design system is something that keeps on living and growing. That is why I see a design system as a **way of working**.
 
@@ -20,7 +20,7 @@ To realize this structure the [DTCG (Design Token Community Group)](https://gith
 
 ### Documenting your design tokens
 
-With the rise of design systems, there has been a growing need for tools that can help designers and developers to manage and document these tokens directly within their design tool. Tools like [Token Studio (Figma tokens)](https://tokens.studio/) have made it easier to follow the DTCG standard. The plugin uses a JSON format to keep track of your tokens. This makes it easy to share your tokens with other team members and developers. It also allows you to connect your tokens to GitHub. By doing so, designers can share tokens with developers, enabling them to use the same values that were defined by designers. This can help to eliminate inconsistencies and reduce the amount of time spent on manual implementation.
+With the rise of design systems, there has been a growing need for tools that can help designers and developers to manage and document these tokens directly within their design tool. Tools like [Token Studio (Figma tokens)](https://tokens.studio/) have made it easier to follow the DTCG standard. The plugin uses a JSON format to keep track of your tokens. This makes it easy to share your tokens with other team members and developers. It also allows you to connect your tokens to GitHub, GitLab or some other [tools](https://docs.tokens.studio/sync/sync). By doing so, designers can share tokens with developers, enabling them to use the same values that were defined by designers. This can help to eliminate inconsistencies and reduce the amount of time spent on manual implementation.
 
 ### Naming your tokens
 
@@ -34,7 +34,7 @@ Design properties like color can be stored as regular variables.
 $blue-400 = #2680EB;
 ```
 
-The variable $blue-400 can be used in your stylesheets. This approach helps you to structure your design but it does come with a downside. Variables don’t necessarily bridge the gap between naming and use. Designers need to know what options they should apply in a particular context. This is where the abstraction layer of design tokens comes in.
+The variable `$blue-400` can be used in your stylesheets. This approach helps you to structure your design but it does come with a downside. Variables don’t necessarily bridge the gap between naming and use. Designers need to know what options they should apply in a particular context. This is where the abstraction layer of design tokens comes in.
 
 ```scss
 $button-cta-background-color = $blue-400;
@@ -96,6 +96,8 @@ $colors-background-button-primary-hover = $blue-400;
 
 These tokens are called alias tokens. They all rely on a base set of tokens, in this example `$blue-400`. This makes it easier to change the base token and have all the alias tokens change with it. This is a great way to create a consistent design system.
 
+![Example naming convention](/images/building-a-design-system-that-scales-with-your-organization/example-naming-convention.jpg)
+
 ## Putting your tokens to the test
 
 A simple yet efficient way to implement your design tokens is by using the atomic design methodology. Atomic design is a methodology composed of five distinct stages working together to create interface design systems in a more deliberate and hierarchical manner. The five stages of atomic design are:
@@ -131,7 +133,7 @@ $box-shadow-none = 0 0px 0px 0 rgba(0, 0, 0, 0.0);
 
 I have created a simple button in Figma
 
-![Button example](images/building-a-design-system-that-scales-with-your-organization/button-example.jpg)
+![Button example](images/building-a-design-system-that-scales-with-your-organization/button-example.svg)
 
 The button atom consists of multiple properties. Even though the atom is not complex there are a lot of properties that we can use to style the button. Let's list all the properties that we can use to style the button:
 
@@ -170,7 +172,7 @@ $margin = 0;
 
 Now let's see what happens if we add variants and state to the buttons.
 
-![Button example](images/building-a-design-system-that-scales-with-your-organization/buttons.jpg)
+![Button example](images/building-a-design-system-that-scales-with-your-organization/buttons.svg)
 
 We now have two button variants, primary and secondary. We also have two button states, default and hover. Let’s take a look at the alias tokens we can create for the button molecule.
 
@@ -242,7 +244,7 @@ As you can see, we have a lot of alias tokens. This is just for one button compo
 
 ### Reducing the number of tokens
 
-As your design systems keeps on growing it is important to keep track of your tokens. As we have seen in the button example, we have a lot of alias tokens. This is just for one button component. Reducing the amount of tokens is not an easy task. The example button component I created has a lot of duplicate tokens. For example, the hover state only changes the box shadow. We can reduce the amount of tokens by creating a box shadow token for the button component. Let's remove all the duplicate tokens from the button component:
+As your design system keeps on growing it is important to keep track of your tokens. As we have seen in the button example, we have a lot of alias tokens. This is just for one button component. Reducing the amount of tokens is not an easy task. The example button component I created has a lot of duplicate tokens. For example, the hover state only changes the box shadow. We can reduce the amount of tokens by creating a box shadow token for the button component. Let's remove all the duplicate tokens from the button component:
 
 ```scss
 // Borders
@@ -268,9 +270,9 @@ $padding-button = $spacing-2 $spacing-3;
 $margin-button = 0;
 ```
 
-Combining tokens can be a risk. In my experience though it is best to keep the amount of alias tokens to a minimum. Adding state or variants to tokens in a later stage is a lot easier then removing duplicate tokens as you might not know where they are used. Before implementing a new atom it is best to think ahead. What are the different states of this atom? What are the different variants of this atom? This will help you to reduce the amount of tokens. When following this naming convention it is best to look at the HTML border syntax. This syntax helps us to create a consistent way to create new components. It also helps us to reduce the amount of tokens. Let's take a look at the HTML border syntax:
+Combining tokens can be a risk. In my experience though it is best to keep the amount of alias tokens to a minimum. Adding state or variants to tokens in a later stage is a lot easier then removing duplicate tokens as you might not know where they are used. Before implementing a new atom it is best to think ahead. What are the different states of this atom? What are the different variants of this atom? This will help you to reduce the amount of tokens. When following this naming convention it is best to look at the HTML border box model. This syntax helps us to create a consistent way to create new components. It also helps us to reduce the amount of tokens. Let's take a look at the HTML border syntax:
 
-![HTML box model](/images/building-a-design-system-that-scales-with-your-organization/box-model.png)
+![HTML box model](/images/building-a-design-system-that-scales-with-your-organization/box-model.jpg)
 
 ## Translating your tokens to code
 
@@ -296,7 +298,7 @@ Style dictionary can be installed as a CLI tool or as a node module. Style dicti
 }
 ```
 
-Let's give the following design tokens (JSON) as a base for our design system. This JSON is automatically created by plugins like Token Studio.
+Let's use the following design tokens (JSON) as a base for our design system. This JSON is automatically created by plugins like Token Studio.
 
 ```json
 // tokens/color.json
@@ -345,6 +347,6 @@ If you want to learn more about style dictionary, I recommend you to check out t
 
 ## Conclusion
 
-Setting up a design system for your organization can be a daunting task. But by following the right steps, you can create a design system that scales with your organization. It is important to think ahead and keep reevaluating your system. Design tokens can help you to create a consistent way to share design across platforms. They can also help you to create a consistent way to share design tokens across platforms. This helps you to create a single source of truth for your design system. This single source of truth can be used to generate code for each platform you want.
+Setting up a design system for your organization can be a daunting task. But by following the right steps, you can create a design system that scales with your organization. Design tokens can help you to create a consistent way to share design across platforms. They can also help you to create a consistent way to share design tokens across platforms. This helps you to create a single source of truth for your design system. This single source of truth can be used to generate code for each platform you want.
 
-A design system should be a new way of working to your organization. This does not mean you should change your way of working overnight. It is important to take small steps and keep reevaluating your system. This helps you to keep your system up to date and relevant. Keep it simple in the beginning but keep in mind that your system should be able to scale with your organization. It is important to think ahead and keep reevaluating your system. The most important step in creating a design system is communication and documentation.
+A design system should be a new way of working for your organization. This does not mean you should change your way of working overnight. It is important to take small steps and keep reevaluating your system. This helps you to keep your system up to date and relevant. Keep it simple in the beginning but keep in mind that your system should be able to scale with your organization. It is important to think ahead and keep reevaluating your system. The most important step in creating a design system is communication and documentation.
