@@ -4,11 +4,11 @@ In this article we will explain what a design system is, why it’s gaining trac
 
 ## Table of contents
 
-- What is a design system?
-- How does this definition compare to others?
-- What are the benefits of using a design system?
-- Frequently asked questions about design systems
-- Relevant links
+-   What is a design system?
+-   How does this definition compare to others?
+-   What are the benefits of using a design system?
+-   Frequently asked questions about design systems
+-   Relevant links
 
 ## What is a design system?
 
@@ -32,11 +32,11 @@ Even though these definitions are not wrong, they are incomplete. A design syste
 
 In his previous article Randy describes the essentials of why a design system can be beneficial for you, and why it is important to know these benefits [How to start creating a design system that integrates with your organization](https://www.divotion.com/blog/how-to-start-creating-a-design-system-that-integrates-with-your-organization). For me the most important benefits are:
 
-- Efficiency and productivity
-- Consistency and brand identity
-- Accelerated design and development cycles
-- Improved collaboration and communication
-- Scalability and flexibility
+-   Efficiency and productivity
+-   Consistency and brand identity
+-   Accelerated design and development cycles
+-   Improved collaboration and communication
+-   Scalability and flexibility
 
 A Design System provides teams with a collection of reusable components, guidelines, and styles. By utilizing these valuable assets, designers and developers can concentrate on addressing design challenges, eliminating the need to recreate elements from scratch for each project. By sticking to standardized styles and design principles, the user experience becomes seamless and recognizable, establishing trust and credibility with users. This acceleration in development leads to shorter development cycles, quicker time-to-market, and the ability to adapt swiftly to changing user needs and industry trends. With this so called "cohesive alignment" among teams you can pave the way for efficient design management at scale, reducing redundancy, and resulting in a harmonious user experience across diverse pages and channels.
 
@@ -46,9 +46,9 @@ A Design System provides teams with a collection of reusable components, guideli
 
 Design systems are made of many components, patterns, styles, and guidelines, which helps to optimize your design efforts. A design system should at least have the following items:
 
-- Reusable components
-- Patterns
-- Brand language
+-   Reusable components
+-   Patterns
+-   Brand language
 
 Beside these items you can also add interaction patterns, accessibility guidelines, design tokens, as well as version control. Remember that a design system is rather a way of working than a collection of components. This means that each design system can contain different elements.
 
@@ -66,6 +66,6 @@ Design systems have become more popular in recent years. A well-designed design 
 
 If you want to know more about design systems, I recommend reading the following articles:
 
-- [How to start creating a design system that integrates with your organization](https://www.divotion.com/blog/how-to-start-creating-a-design-system-that-integrates-with-your-organization)
-- [Nielsen Norman Group: Design Systems 101](https://www.nngroup.com/articles/design-systems-101)
-- [Building a design system that scales with your organization](https://www.divotion.com/blog/building-a-design-system-that-scales-with-your-organization)
+-   [How to start creating a design system that integrates with your organization](https://www.divotion.com/blog/how-to-start-creating-a-design-system-that-integrates-with-your-organization)
+-   [Nielsen Norman Group: Design Systems 101](https://www.nngroup.com/articles/design-systems-101)
+-   [Building a design system that scales with your organization](https://www.divotion.com/blog/building-a-design-system-that-scales-with-your-organization)

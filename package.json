@@ -1,0 +1,15 @@
+{
+"name": "blogs",
+"version": "1.0.0",
+"description": "A collection of blogs",
+"author": "Dipsaus",
+"license": "ISC",
+"type": "module",
+"scripts": {
+"format": "prettier --check .",
+"format:fix": "prettier --write ."
+},
+"devDependencies": {
+"prettier": "^3.3.3"
+}
+}

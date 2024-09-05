@@ -4,13 +4,13 @@ Design systems are gaining traction, and rightfully so. A design system elevates
 
 Table of contents:
 
-- [Setting the Foundation: Importance of Structure in Design systems](#setting-the-foundation-importance-of-structure-in-design-systems)
-- [Understanding Atomic design](#understanding-atomic-design)
-- [Atomic design in Action](#atomic-design-in-action)
-- [From Atoms to Functionality](#from-atoms-to-functionality)
-- [Designing with purpose](#designing-with-purpose)
-- [Atomic design in Perspective](#atomic-design-in-perspective)
-- [The Atomic Way Forward](#the-atomic-way-forward)
+-   [Setting the Foundation: Importance of Structure in Design systems](#setting-the-foundation-importance-of-structure-in-design-systems)
+-   [Understanding Atomic design](#understanding-atomic-design)
+-   [Atomic design in Action](#atomic-design-in-action)
+-   [From Atoms to Functionality](#from-atoms-to-functionality)
+-   [Designing with purpose](#designing-with-purpose)
+-   [Atomic design in Perspective](#atomic-design-in-perspective)
+-   [The Atomic Way Forward](#the-atomic-way-forward)
 
 ## Setting the Foundation: Importance of Structure in Design systems
 
@@ -64,33 +64,24 @@ Now, imagine molecules are the glue that holds our pieces together. Molecules sh
 For this example we will write a simple breadcrumb molecule that consists of already created atoms, like a breadcrumb item and a breadcrumb separator. The breadcrumb molecule is the glue that holds these atoms together. Before writing our code setup let's write down how our molecule should glue together our existing atoms. I'd like to construct my molecules as a React component that accepts children. This way we can pass in our atoms as children and the molecule will glue them together.
 
 ```tsx
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react'
 
 type BreadcrumbListProps = {
-  children: ReactNode;
-};
+    children: ReactNode
+}
 
 export function BreadcrumbList({ children }: BreadcrumbListProps) {
-  return (
-    <div className="breadcrumb-list">
-      {children} // This is where our Atoms will be glued together, but how?
-    </div>
-  );
+    return <div className="breadcrumb-list">{children} // This is where our Atoms will be glued together, but how?</div>
 }
 ```
 
 This setup allows “any” React children to be entered. But how do we glue them together? We can use the React.Children API to get all the children and iterate over them. This way we can add our breadcrumb separator between the breadcrumb items.
 
 ```tsx
-import {
-  cloneElement,
-  Children,
-  type ReactElement,
-  type ReactNode,
-} from "react";
-import clsx from "clsx";
+import { cloneElement, Children, type ReactElement, type ReactNode } from 'react'
+import clsx from 'clsx'
 
-import { BreadcrumbDivider } from "./BreadcrumbDivider";
+import { BreadcrumbDivider } from './BreadcrumbDivider'
 
 /**
  * Gets only the valid children of a component,
@@ -99,35 +90,30 @@ import { BreadcrumbDivider } from "./BreadcrumbDivider";
  * @param children the children
  */
 function getValidChildren(children: ReactNode) {
-  return Children.toArray(children).filter((child) =>
-    isValidElement(child)
-  ) as ReactElement[];
+    return Children.toArray(children).filter((child) => isValidElement(child)) as ReactElement[]
 }
 
 interface BreadcrumbItemProps {
-  children: ReactNode;
+    children: ReactNode
 }
 
 export function BreadcrumbItem({ children }: BreadcrumbItemProps) {
-  const validChildren = getValidChildren(children);
-  const totalItems = validChildren.length;
+    const validChildren = getValidChildren(children)
+    const totalItems = validChildren.length
 
-  const clones = validChildren.map((child, index) =>
-    cloneElement(child, {
-      children: (
-        <>
-          {child?.props?.children || null}
-          {index < totalItems - 1 && <BreadcrumbDivider />}
-        </>
-      ),
-      className: clsx(
-        "some-custom-breadcrumb-item-styling",
-        child?.props?.className
-      ), // Here we can provide extra properties as glue to our atoms
-    })
-  );
+    const clones = validChildren.map((child, index) =>
+        cloneElement(child, {
+            children: (
+                <>
+                    {child?.props?.children || null}
+                    {index < totalItems - 1 && <BreadcrumbDivider />}
+                </>
+            ),
+            className: clsx('some-custom-breadcrumb-item-styling', child?.props?.className) // Here we can provide extra properties as glue to our atoms
+        })
+    )
 
-  return <div className="breadcrumb-item">{clones}</div>;
+    return <div className="breadcrumb-item">{clones}</div>
 }
 ```
 
@@ -136,23 +122,23 @@ With this setup we still allow our consumers to provide extra properties to our 
 If we want to use our breadcrumb molecule we can do it as follows:
 
 ```tsx
-import { BreadcrumbList } from "./BreadcrumbList";
-import { BreadcrumbItem } from "./BreadcrumbItem";
+import { BreadcrumbList } from './BreadcrumbList'
+import { BreadcrumbItem } from './BreadcrumbItem'
 
 function BreadcrumbsView() {
-  return (
-    <BreadcrumbList>
-      <BreadcrumbItem>
-        <a href="/">Home</a>
-      </BreadcrumbItem>
-      <BreadcrumbItem>
-        <a href="/about">About</a>
-      </BreadcrumbItem>
-      <BreadcrumbItem>
-        <a href="/contact">Contact</a>
-      </BreadcrumbItem>
-    </BreadcrumbList>
-  );
+    return (
+        <BreadcrumbList>
+            <BreadcrumbItem>
+                <a href="/">Home</a>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <a href="/about">About</a>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <a href="/contact">Contact</a>
+            </BreadcrumbItem>
+        </BreadcrumbList>
+    )
 }
 ```
 

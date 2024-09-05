@@ -6,9 +6,9 @@ The exact meaning of a design system differs among the web. According to the [Ni
 
 Design systems are made of many components, patterns, styles, and guidelines, which helps to optimize your design efforts. A design system should at least have the following items:
 
-- **Reusable components**, containing modular components that can be used across different applications or interfaces. A component should have a name, description, attribute, state, code snippet and implementation for developers.
-- **Patterns**, which are the building instructions that you need, to use the components effectively across all your products.
-- **Brand language and identity**, implementation guidelines, visual references, and design principles for creating interfaces.
+-   **Reusable components**, containing modular components that can be used across different applications or interfaces. A component should have a name, description, attribute, state, code snippet and implementation for developers.
+-   **Patterns**, which are the building instructions that you need, to use the components effectively across all your products.
+-   **Brand language and identity**, implementation guidelines, visual references, and design principles for creating interfaces.
 
 However, they are designed, managed, and implemented by people. This means that a design system is something that keeps on living and growing.
 That is why I see a design system as a **way of working**.
@@ -48,11 +48,11 @@ Naming your design tokens appropriately might require some effort. The process i
 
 In my recent project at Intergamma we choose a naming convention separated by five different groups:
 
-- Category
-- Usage
-- Component
-- Variant
-- State
+-   Category
+-   Usage
+-   Component
+-   Variant
+-   State
 
 Let me explain each group in more detail.
 
@@ -104,11 +104,11 @@ These tokens are called alias tokens. They all rely on a base set of tokens, in 
 
 A simple yet efficient way to implement your design tokens is by using the atomic design methodology. Atomic design is a methodology composed of five distinct stages working together to create interface design systems in a more deliberate and hierarchical manner. The five stages of atomic design are:
 
-- Atoms
-- Molecules
-- Organisms
-- Templates
-- Pages
+-   Atoms
+-   Molecules
+-   Organisms
+-   Templates
+-   Pages
 
 By using this system, we start with smaller components and build them up to larger components. This helps to create a consistent way for the creation of new components. This also helps to get used to the new way of working. Let’s take a look at how we can use this to create a button component.
 
@@ -139,17 +139,17 @@ I have created a simple button in Figma.
 
 The button atom consists of multiple properties. Even though the atom is not complex, there are a lot of properties that we can use to style the button. Let's list all the properties that we can use to style the button:
 
-- border-width
-- border-color
-- border-radius
-- background-color
-- box-shadow
-- font-size
-- font-weight
-- font-family
-- color
-- padding
-- margin
+-   border-width
+-   border-color
+-   border-radius
+-   background-color
+-   box-shadow
+-   font-size
+-   font-weight
+-   font-family
+-   color
+-   padding
+-   margin
 
 If we follow the naming convention mentioned earlier, we create a lot of alias tokens. Let's define these properties in a `scss` file:
 
@@ -286,19 +286,19 @@ Style dictionary can be installed as a CLI tool or as a node module. Style dicti
 
 ```json
 {
-  "source": ["tokens/**/*.json"],
-  "platforms": {
-    "css": {
-      "transformGroup": "css",
-      "buildPath": "dist/css/",
-      "files": [
-        {
-          "destination": "variables.css",
-          "format": "css/variables"
+    "source": ["tokens/**/*.json"],
+    "platforms": {
+        "css": {
+            "transformGroup": "css",
+            "buildPath": "dist/css/",
+            "files": [
+                {
+                    "destination": "variables.css",
+                    "format": "css/variables"
+                }
+            ]
         }
-      ]
     }
-  }
 }
 ```
 
@@ -307,13 +307,13 @@ Let's use the following design tokens (JSON) as a base for our design system. Th
 ```json
 // tokens/color.json
 {
-  "color": {
-    "black": { "value": "#000000" },
-    "font": {
-      "primary": { "value": "{color.black.value}" },
-      "input": { "value": "{color.font.primary.value}" }
+    "color": {
+        "black": { "value": "#000000" },
+        "font": {
+            "primary": { "value": "{color.black.value}" },
+            "input": { "value": "{color.font.primary.value}" }
+        }
     }
-  }
 }
 ```
 
@@ -321,9 +321,9 @@ We can see a couple of references to other tokens. For example `{color.black.val
 
 ```css
 :root {
-  --color-black: #000000;
-  --color-font-primary: #000000;
-  --color-font-input: #000000;
+    --color-black: #000000;
+    --color-font-primary: #000000;
+    --color-font-input: #000000;
 }
 ```
 
@@ -333,18 +333,18 @@ Style Dictionary is highly configurable. We can transform token names, add prefi
 
 ```js
 StyleDictionary.registerTransform({
-  name: "time/seconds",
-  type: "value",
-  matcher: function (token) {
-    return token.attributes.category === "time";
-  },
-  transformer: function (token) {
-    // Note the use of prop.original.value,
-    // before any transforms are performed, the build system
-    // clones the original token to the 'original' attribute.
-    return (parseInt(token.original.value) / 1000).toString() + "s";
-  },
-});
+    name: 'time/seconds',
+    type: 'value',
+    matcher: function (token) {
+        return token.attributes.category === 'time'
+    },
+    transformer: function (token) {
+        // Note the use of prop.original.value,
+        // before any transforms are performed, the build system
+        // clones the original token to the 'original' attribute.
+        return (parseInt(token.original.value) / 1000).toString() + 's'
+    }
+})
 ```
 
 If you want to learn more about Style Dictionary, I recommend to check out their [documentation](https://amzn.github.io/style-dictionary/#/). Keep in mind that style dictionary parses all files recursively in the source folder. This means that you can split your tokens into multiple files. For example, you can split your tokens into a `color.json`, `spacing.json`, `typography.json`, and `border.json` file. This makes it easier to maintain your tokens.
