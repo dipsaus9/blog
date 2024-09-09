@@ -284,4 +284,453 @@ roles without concern of how everything ties together. That simplifies things an
 experienced problem in React called "prop drilling", where you end up passing props through multiple layers of
 components just to get data from one place to another.
 
-Let’s break it down with a simple example in React using a Tabs component:
+Let’s break it down with a simple example in React using a Tabs component
+
+We'll create the `Tabs` component, which manages the shared state (active tab) and makes it available via `TabsContext`
+(exported by a hook `useTabs`).
+
+```tsx
+// Tabs.tsx
+import { createContext, useState, type PropsWithChildren } from 'react'
+
+interface TabsContextProps {
+  activeTab: string
+  setActiveTab: (index: string) => void
+}
+
+// Create the context to hold the active tab state and setter function
+const TabsContext = createContext<TabsContextProps | undefined>(undefined)
+
+export function useTabs() {
+  const context = useContext(TabsContext)
+
+  if (!context) {
+    throw new Error('useTabs must be used within a Tabs component')
+  }
+
+  return context
+}
+
+interface TabsProps {
+  defaultValue?: string
+}
+
+// Tabs component manages the state and provides context to its children
+export function Tabs({ children, defaultValue }: PropsWithChildren<TabsProps>) {
+  const [activeTab, setActiveTab] = useState(defaultValue)
+
+  return (
+    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
+      <div className="tabs">{children}</div>
+    </TabsContext.Provider>
+  )
+}
+```
+
+The `TabsList` will act as a container for the TabTrigger components, and TabTrigger will handle switching between tabs.
+
+```tsx
+// TabsList.tsx
+interface TabTriggerProps {
+  value: string
+}
+
+export function TabsList({ children }: PropsWithChildren<TabsListProps>) {
+  return (
+    <div role="tablist" className="tabs-list">
+      {children}
+    </div>
+  )
+}
+```
+
+The TabList needs a TabTrigger component to handle the tab switching
+
+```tsx
+// TabTrigger.tsx
+import { useTabs } from './Tabs'
+
+interface TabTriggerProps {
+  value: string
+}
+
+export function TabTrigger({ value, children }: PropsWithChildren<TabTriggerProps>) {
+  const { activeTab, setActiveTab } = useTabs()
+
+  return (
+    <button
+      role="tab"
+      aria-selected={activeTab === value}
+      aria-controls={`panel-${value}`}
+      id={`tab-${value}`}
+      onClick={() => setActiveTab(value)}
+      className={`tab-trigger ${activeTab === value ? 'active' : ''}`}
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+And finally, the `TabsContent` component will render the content of the active tab
+
+```tsx
+// TabsContent.tsx
+import { useTabs } from './Tabs'
+
+interface TabsContentProps {
+  value: string
+}
+
+export function TabsContent({ value, children }: PropsWithChildren<TabsContentProps>) {
+  const { activeTab } = useTabs()
+
+  return activeTab === value ? (
+    <div role="tabpanel" aria-labelledby={`tab-${value}`} id={`panel-${value}`}>
+      {children}
+    </div>
+  ) : null
+}
+```
+
+When putting this all together, you get a flexible and dynamic Tabs component that can be easily customized and extended
+to fit your needs.
+
+```tsx
+export function TabExample() {
+  return (
+    <Tabs defaultValue="Tab 1">
+      <TabsList>
+        <TabTrigger value="Tab 1">Content 1</TabTrigger>
+        <TabTrigger value="Tab 2">Content 2</TabTrigger>
+        <TabTrigger value="Tab 3">Content 3</TabTrigger>
+      </TabsList>
+      <TabsContent value="Tab 1">
+        <p>Tab 1 content</p>
+      </TabsContent>
+      <TabsContent value="Tab 2">
+        <p>Tab 2 content</p>
+      </TabsContent>
+      <TabsContent value="Tab 3">
+        <p>Tab 3 content</p>
+      </TabsContent>
+    </Tabs>
+  )
+}
+```
+
+This example illustrates some of the benefits of using the Compound Component Pattern in React. By separating concerns
+between `Tabs`, `TabTrigger`, and `TabsContent`, each component focuses on a specific task while sharing state through
+context. Furthermore, it simplifies not only the management of complex interactions but also the flexibility in how such
+components could be used and further customized.
+
+### Why the Compound Pattern Works
+
+What ends up making the Compound Component Pattern so powerful is it centralizes state management to the parent
+component while allowing child components to perform their specific tasks on their own. Going back to our `Tabs`
+example, the `Tabs` component regulates the active tab state and communicates that down to its child components
+`TabTrigger` and `TabsContent` via context. This design eliminates the need to use prop drilling, where props are passed
+through many levels. Instead, it simply provides a way for child components to easily access and consume this shared
+state. For example, the `TabTrigger` component does not need any explicit knowledge about how the tabs system works. Its
+only role is to fire an active tab change when clicked while the `TabsContent` component dynamically renders content
+based on the current state. This division of responsibilities fosters a clear and maintainable framework, allowing for
+the seamless scaling of the UI without intertwining the logic across different components. This is pretty useful when
+building any dynamic UI whose aim is to adopt all the possible user contexts and the user interactions.
+
+Another strong advantage of the Compound Component Pattern is flexibility and personalization, as can be seen in the
+`Tabs` example. Given that state management is within the `Tabs` component, adding new `TabTrigger` components or
+`TabsContent` panels is remarkably easy. Every new tab works perfectly, without any additional overhead, as the parent
+takes care of the state updates and synchronizations. This makes customization very easy, as the children can be themed
+or changed without affecting the bigger picture. Another advantage provided by the use of shared state throughout the
+components is the reduction in the chances of state inconsistency among different components. This approach not only
+enhances the readability and maintainability of code but also fosters the creation of dynamic, interactive, and scalable
+user interfaces that grow with the application. The ability to extend the interface with ease, while preserving
+consistency and managing complexity, makes the Compound Component Pattern a go-to option for constructing rich user
+interfaces in React applications.
+
+### Challenges of the Compound Pattern
+
+Although the Compound Component Pattern has great flexibility in its application, this comes with several downsides. For
+instance, as the application grows, the complexity for managing shared state across increasing numbers of components
+quickly increases, which in turn can make maintenance and debugging harder. In our `Tabs` example, while the pattern
+keeps components modular, it's pretty hard to trace the shared state flow across the layers when more components and
+interactions are involved. This pattern also introduces a rather increased learning curve, mainly for developers not yet
+well-acquainted with some advanced React concepts like context and state management. Understanding how components can
+communicate without explicitly passing props down can be really hard.
+
+The other concern is type safety. However, since the shared state is very often accessed through context, ensuring that
+type safety is strong in each component becomes even more cumbersome with TypeScript. Mistakes in types or state can
+lead to runtime errors, and tracking them at development time becomes so much more difficult.
+
+Lastly, this pattern may not always work well with deeply nested components or fragments, where context may not
+propagate cleanly, leading to broken functionality or unexpected behavior. Managing these nested layers requires careful
+structuring to avoid issues, which can complicate the implementation even further.
+
+## Breaking Down the Thought Process
+
+When working on large, complex UI designs, it’s easy to feel overwhelmed by the sheer number of components and
+interactions that need to be managed. The more the design grows, the more complex it becomes, and suddenly, what started
+off as a quite straightforward project became a tangled mess of state management, props, and tightly-coupled components.
+There's where so many devs and designers have hit a wall: How do you hold up flexibility and scalability without
+sacrificing clarity or control?
+
+The Compound Components pattern offers a way out of this maze, but it comes with its own set of challenges. It’s not
+just about building components; it’s about understanding how they fit together, how they should communicate, and how to
+structure them so that they remain flexible as your project evolves. This thought process can be difficult to master,
+especially when you’re dealing with the demands of a large design system.
+
+In this section, I'll break out, step by step, how I approach these challenges. We'll see how to deconstruct complex
+designs into manageable pieces, how to handle state and logic without losing your mind, and how to design APIs that make
+your components easy to use and extend. I hope to make the Compound Components pattern more accessible, helping you to
+confidently apply it to even the most challenging projects.
+
+### Understanding the Requirements
+
+To effectively employ the Compound Components pattern, first you have to deeply know the requirements of your UI. Now,
+this may go without saying, but in the rush to start writing code, it usually gets overlooked. Before you start to write
+a line of code, take a step back and evaluate what your interface needs to pull off. What are the key interactions and
+behaviors? How will different components have to communicate with each other? It's good to know and understand these
+needs upfront, as it sets the base for all that would follow. Below are some personal tips that have helped me to
+deconstruct and manage complex UI projects effectively:
+
+Begin with the User Experience: **Understanding of the user journey** is a UX designer's primary responsibility, yet
+that does not mean developers can't or shouldn't be involved. Contributing to UX design allows developers to provide
+their valuable insight and see what helps in creating components that truly meet the user's needs. For example, at
+Schiphol, we’ve They achieved great success by having UX designers and developers frequently meet and discuss emerging
+user needs and features. This collaboration allows us to align our visions, so that what is designed and what is
+technically implemented are feasible and optimized. By focusing on user interactions and early feedback, it is possible
+to highlight the really necessary components and understand how they should behave, thereby allowing for easier
+development and more consistency across the user experience. experience.
+
+**Break down big pictures**: Once the user journey has been identified, break big pictures down into more digestible
+pieces. Identify major components in each interaction. For instance, on a form, consider every single input field and
+buttons validation messages are separate components, and it shows their relationships to each other, as well as how they
+might Work together, hence, you are able to plan their interaction. This way, it not only indicates how different
+components are related and how they work in relation to one another but also may help you to see variations and states
+that each of these subcomponents may take various forms. It is this foresight that inspires one to craft more robust and
+adaptable subcomponents, and thus permit the easier development and management of larger, more complex components. The
+clarity of such , The relationships and behavior of components will, in turn, allow your UI to be changed much more
+easily, even when requirements Change.
+
+**Define Component Responsibilities**: Explain what each part is supposed to do. A common mistake is giving too much
+responsibility to one component, which makes it harder to take care of and improve. By clearly explaining roles — like
+having a single main component in charge of the form's state while its smaller parts handle specific input activities,
+you can create a structure that is easier to manage and organize.
+
+**Plan for flexibility**: Consider how your components might need to evolve. Ask yourself: How can these components be
+reused in different contexts? What level of customization is necessary? By planning for flexibility, you can design
+components that easily adapt to new needs, with minimal need for future major overhauls.
+
+**Document Your Thought Process**: It might sound tedious, but documenting your thought process can be incredibly
+valuable. Write down the requirements you’ve identified, the interactions you’re planning for, and the roles of each
+component. This not only keeps you focused but also makes it easier to communicate your design decisions with your team.
+
+### How to identify reusable components
+
+Think of designing UI components like putting together a car. A small component, like a tire or a steering wheel, is
+pretty simple and understandable in functionality. But when you start looking at a car as a whole, it’s made up of many
+different parts working together. The key to building an efficient vehicle lies in recognizing which parts can be reused
+across different models. Similarly, in UI design, smaller components like buttons are straightforward, but when you
+encounter larger, more complex elements, like a fully designed card, the challenge is breaking it down into reusable
+parts that can fit into other sections of your “vehicle.”
+
+Let's break down a card component into smaller, reusable parts. This example is from our Schiphol website and design
+system.
+
+![Main card Schiphol design system](./images/schiphol-main-card.jpg)
+
+Compared to other interactive active components, such as tabs that involve active states and user input handling, this
+is a purely presentational component. This avoids complicated state management but offers invaluable lessons in how best
+to structure and arrange content in a consistent, reusable manner. The Card has two main, well-defined regions: the
+**header** and the **content**. Both are designed for specific purposes and include specific layout directives that
+foster flexibility in various applications while ensuring continuity.
+
+![Card breakdown Schiphol design system](./images/schiphol-main-card-divided.jpg)
+
+Starting with the header, there are two key elements: an image and a badge. The image is the dominant visual asset, and
+it typically spans the width of the card, providing a strong visual hook. The **badge**, on the other hand, acts as a
+label or status indicator and is consistently positioned in the same fixed spot—usually in one of the corners of the
+image. This badge placement ensures that, no matter the variation in content or image size, the badge remains visible
+and clearly conveys important information to the user.
+
+![Example of the Card header](./images/schiphol-card-header.jpg)
+
+Below the header, the **content** section consists of a collection of multiple items that follow a structured layout.
+All cards feature a **title**, which for this content section is a required component. The opposite is true for the
+**subtitle**, which may optionally appear. It might show up underneath the title on a particular card variation, or
+lower in the card - perhaps underneath supplemental text or a list of items. Each possible placement of the subtitle
+comes with its own styling rules, ensuring that even though the placement varies, the card maintains visual consistency
+and readability. Within the content section the developer can add any predefined content, such as a list of items, a
+paragraph of text, or a button. These content items are flexible and can be arranged in any order, allowing for a
+variety of card layouts while maintaining a consistent visual style.
+
+![Example of the Card content](./images/schiphol-card-content.jpg)
+
+One of the most important aspects of the content section is the fact that every element, starting from the text links
+down to the list items to price information, all have a fixed spacing and layout structure. For instance, each text link
+and each list item has equal spacing between the elements, which makes them neat and organized. These fixed spacings and
+alignments are important in maintaining the integrity of the card when the amount of its content may change. A clearly
+defined layout grid or utility-based spacing—such as margin or padding classes—will ensure these elements always remain
+consistent, regardless of the content. CSS grid or flexbox is a great choice for handling this layout because it
+provides the necessary structure but keeps the code modular and adaptable.
+
+With a full understanding of how this card is structured, let's think about how the API for this component would Look in
+a frontend application. Since a card is divided into reusable sections, header, badge, image, title, subtitle, and
+content, all of which can be passed as props or child components to easily customize and render various variations in
+the card. For instance, a possible API for rendering this card could look like this:
+
+```tsx
+export function Card() {
+  return (
+    <Card>
+      <CardHeader>
+        <Badge variant="default">Badge</Badge>
+        <Image alt="placeholder" src="https://via.placeholder.com/450x500" />
+      </CardHeader>
+      <CardContent>
+        <CardSubTitle>Sub Title</CardSubTitle>
+        <CardTitle>Title</CardTitle>
+        <Paragraph>
+          For a smoother security check, wear fitted clothing and low shoes. That way, you won’t have to take anything
+          off.
+        </Paragraph>
+        <List>
+          <ListItem>
+            <TextLink icon={<ArrowRight />}>List Item</TextLink>
+          </ListItem>
+          <ListItem>
+            <TextLink icon={<ArrowRight />}>List Item 2</TextLink>
+          </ListItem>
+        </List>
+        <List>
+          <ListItem icon={<Categories />}>List Item</ListItem>
+          <ListItem icon={<Categories />}>
+            List Item 2 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo tempora consequatur nulla ut
+            ab nemo? Quidem mollitia perferendis adipisci accusantium alias numquam debitis iusto explicabo. Ullam ipsa
+            placeat laborum qui.
+          </ListItem>
+        </List>
+        <Divider />
+        <ButtonGroup>
+          <Button intent="primary">Book here</Button>
+          <TextLink href="#" icon={<ArrowRight />}>
+            More info
+          </TextLink>
+        </ButtonGroup>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Accordingly, this API allows for a high degree of customization and flexibility to the developer for making various
+types of cards. variations without rewriting the whole component. Breaking the card down into smaller, reusable
+components allows for Each of them plays a particular role, by which we can easily manage the complexity of the card and
+maintain its coherence. versatile, and adaptable for various applications.
+
+By this setup we can easily create variations of the card with different content, layouts, or styles, without having to
+rewrite the whole component. For example:
+
+An article card
+
+![Article card](./images/schiphol-article-card.jpg)
+
+```tsx
+export function ArticleCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <Image alt="placeholder" ratio="3:2" src="https://via.placeholder.com/450x500" />
+      </CardHeader>
+      <CardContent>
+        <CardSubTitle>Sub Title</CardSubTitle>
+        <CardTitle>Article example</CardTitle>
+        <Paragraph>
+          For a smoother security check, wear fitted clothing and low shoes. That way, you won’t have to take anything
+          off.
+        </Paragraph>
+        <Button intent="tertiary">Book here</Button>
+        <TextLink href="#" icon={<ArrowRight />}>
+          More info
+        </TextLink>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+A product card
+
+![Product card](./images/schiphol-parking-card.jpg)
+
+```tsx
+export function ProductCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <Badge icon={<Bus />} variant="default">
+          5 min
+        </Badge>
+        <Image alt="placeholder" src="https://via.placeholder.com/450x500" />
+      </CardHeader>
+      <CardContent>
+        <CardTitle>Title</CardTitle>
+        <List>
+          <ListItem icon={<Euro1 />}>Most cost efficient</ListItem>
+          <ListItem icon={<ClockFill />}>Long stay (min. 8hrs)</ListItem>
+          <ListItem icon={<Baggage />}>Baggage loading point</ListItem>
+        </List>
+        <Divider />
+        <div className="flex flex-wrap items-center gap-x-gap-lg gap-y-gap-sm">
+          <Heading size="sm">€ 83,50</Heading>
+          <Paragraph size="base">€ 8,35 per day</Paragraph>
+          <Paragraph className="w-full text-color-text-tertiary" size="base">
+            € 156 without reservation
+          </Paragraph>
+        </div>
+        <Button intent="primary">Book here</Button>
+        <TextLink href="#" icon={<ArrowRight />}>
+          More info
+        </TextLink>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+And even a contact card
+
+![Contact card](./images/schiphol-contact-card.jpg)
+
+```tsx
+export function ContactCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <Image alt="placeholder" ratio="1:1" src="https://via.placeholder.com/450x500" />
+      </CardHeader>
+      <CardContent>
+        <CardTitle>John Doe</CardTitle>
+        <CardSubTitle>Leasing manager</CardSubTitle>
+        <List>
+          <ListItem intent="link">
+            <TextLink href="#" icon={<Phone />} iconPosition="left">
+              +31 6 123 456 78
+            </TextLink>
+          </ListItem>
+          <ListItem intent="link">
+            <TextLink href="#" icon={<Email />} iconPosition="left">
+              e-mailadres
+            </TextLink>
+          </ListItem>
+          <ListItem intent="link">
+            <TextLink href="#" icon={<Linkedin />} iconPosition="left">
+              Linkedin
+            </TextLink>
+          </ListItem>
+        </List>
+      </CardContent>
+    </Card>
+  )
+}
+```
