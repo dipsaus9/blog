@@ -17,20 +17,22 @@ interactions, and keep your code as clean and scalable as possible — even when
 
 ## What Problem Does Atomic Design Try to Solve?
 
-Before we get into where Atomic Design comes up short, let's take a step back and appreciate what it originally set out
-to do. Without doubt, designs can quickly get messy. Components get reused in inconsistent ways, design systems often
-end up more like loose guidelines than hard rules, and Atomic Design as conceived by Brad Frost was the silver bullet to
-change all that. Basically, Atomic Design deals with creating consistency and modularity in your UI. It means breaking
-the interface down to its very smallest building blocks, inspired by how matter is constructed in the real world. Just
-like in chemistry, where atoms combine into molecules and those molecules come together to create organisms, atomic
-design uses these terms for different levels of UI components. Atoms would be your basic, indestructible elements:
-things such as buttons or input fields. Molecules would be groups of atoms and would be something like a form label
-paired with an input field. Therefore, organisms would be more complex structures, like, for instance, a whole form with
-multiple molecules performing together. This way, in thinking through every little piece of your UI, all the pieces will
-be reusable and fit together predictably. While this is wonderful as a philosophy, UI design just doesn't always lend
-itself to being that cut-and-dried in the real world. User interfaces more often call for flexibility, adaptability, and
-dynamic interactions that don't normally fit within predefined categories. To this end, the very rigid structure of
-atomic design sometimes tends to fall a little short at dealing with more subtle and complex demands made upon modern UI
+Before we do a deep dive we have to take a step back and appreciate what Atomic design originally set out to do. We’ve
+all been there — you open up a project with a UI that looks like it was designed by five different people, all with
+different ideas of what consistency means. Buttons don’t match, input fields are everywhere, and every page feels like a
+new adventure… in chaos. Atomic Design as conceived by Brad Frost was the silver bullet to change all that.
+
+Basically, Atomic Design deals with creating consistency and modularity in your UI. It means breaking the interface down
+to its very smallest building blocks, inspired by how matter is constructed in the real world. Just like in chemistry,
+where atoms combine into molecules and those molecules come together to create organisms, atomic design uses these terms
+for different levels of UI components. Atoms would be your basic, indestructible elements: things such as buttons or
+input fields. Molecules would be groups of atoms and would be something like a form label paired with an input field.
+Therefore, organisms would be more complex structures, like, for instance, a whole form with multiple molecules
+performing together. This way, in thinking through every little piece of your UI, all the pieces will be reusable and
+fit together predictably. While this is wonderful as a philosophy, UI design just doesn't always lend itself to being
+that cut-and-dried in the real world. User interfaces more often call for flexibility, adaptability, and dynamic
+interactions that don't normally fit within predefined categories. To this end, the very rigid structure of atomic
+design sometimes tends to fall a little short at dealing with more subtle and complex demands made upon modern UI
 development.
 
 ### The limits of Atomic Design
@@ -125,7 +127,7 @@ interface TextInputProps {
   error?: string
 }
 
-export function TextInput({ value, onChange }: TextInputProps) {
+export function TextInput({ value, onChange, error }: TextInputProps) {
   return (
     <>
       <input type="text" value={value} onChange={onChange} />
@@ -212,8 +214,8 @@ export function Form({ formData, setFormData }: FormProps) {
   }
 
   return (
-    <form>
-      <FormFields formData={formData} setFormData={setFormData} />
+    <form onSubmit={handleSubmit}>
+      <FormFields formData={formData} setFormData={setFormData} errors={errors} />
       <button type="submit" disabled={!formData.name || !formData.email}>
         Submit
       </button>
@@ -331,11 +333,7 @@ The `TabsList` will act as a container for the TabTrigger components, and TabTri
 
 ```tsx
 // TabsList.tsx
-interface TabTriggerProps {
-  value: string
-}
-
-export function TabsList({ children }: PropsWithChildren<TabsListProps>) {
+export function TabsList({ children }: PropsWithChildren) {
   return (
     <div role="tablist" className="tabs-list">
       {children}
@@ -413,6 +411,10 @@ export function TabExample() {
       </TabsContent>
       <TabsContent value="Tab 3">
         <p>Tab 3 content</p>
+        <div>
+          We can add any content we want here
+          <img src="https://via.placeholder.com/150" alt="placeholder" />
+        </div>
       </TabsContent>
     </Tabs>
   )
@@ -471,7 +473,7 @@ structuring to avoid issues, which can complicate the implementation even furthe
 When working on large, complex UI designs, it’s easy to feel overwhelmed by the sheer number of components and
 interactions that need to be managed. The more the design grows, the more complex it becomes, and suddenly, what started
 off as a quite straightforward project became a tangled mess of state management, props, and tightly-coupled components.
-There's where so many devs and designers have hit a wall: How do you hold up flexibility and scalability without
+There's where so many developers and designers have hit a wall: How do you hold up flexibility and scalability without
 sacrificing clarity or control?
 
 The Compound Components pattern offers a way out of this maze, but it comes with its own set of challenges. It’s not
@@ -500,7 +502,7 @@ Schiphol, we’ve They achieved great success by having UX designers and develop
 user needs and features. This collaboration allows us to align our visions, so that what is designed and what is
 technically implemented are feasible and optimized. By focusing on user interactions and early feedback, it is possible
 to highlight the really necessary components and understand how they should behave, thereby allowing for easier
-development and more consistency across the user experience. experience.
+development and more consistency across the user experience.
 
 **Break down big pictures**: Once the user journey has been identified, break big pictures down into more digestible
 pieces. Identify major components in each interaction. For instance, on a form, consider every single input field and
@@ -547,6 +549,8 @@ foster flexibility in various applications while ensuring continuity.
 
 ![Card breakdown Schiphol design system](./images/schiphol-main-card-divided.jpg)
 
+#### Card header
+
 Starting with the header, there are two key elements: an image and a badge. The image is the dominant visual asset, and
 it typically spans the width of the card, providing a strong visual hook. The **badge**, on the other hand, acts as a
 label or status indicator and is consistently positioned in the same fixed spot—usually in one of the corners of the
@@ -554,6 +558,201 @@ image. This badge placement ensures that, no matter the variation in content or 
 and clearly conveys important information to the user.
 
 ![Example of the Card header](./images/schiphol-card-header.jpg)
+
+#### Header in code
+
+Let's first create a Badge component. In the example I'm using a forwardRef function that enables the use of Polymorphic
+components. This allows the Badge component to be rendered as a `span` by default but can be changed to a different
+element, like a `div`, if needed. This flexibility ensures that the Badge component can be easily adapted to different
+layouts and designs without having to create multiple components for each variation. If you want to read more about
+Polymorphic components, check out this
+[article](https://www.freecodecamp.org/news/build-strongly-typed-polymorphic-components-with-react-and-typescript/).
+
+````tsx
+import { cloneElement, type ReactElement } from 'react'
+
+import { cx } from 'class-variance-authority'
+
+import { forwardRef } from '../helpers' // A helper function to type forwardRef and create a Polymorphic component
+import { badgeVariants, type BadgeVariantsProps } from './badge-variants' // Styles for different badge variants
+
+export interface BadgeProps extends BadgeVariantsProps {
+  icon?: ReactElement // Icon to display in the badge, optional
+}
+
+const defaultAs = 'span' as const
+
+/**
+ * Badges are used to display a small amount of information, such as a discount or status.
+ * Extends the native `span` element.
+ *
+ * @param variant - Button intent (primary, privium, discount), default is `default`
+ * @param icon - Icon to display in the badge
+ * @param children - Content to display in the badge
+ * @param as - Element to render as, defaults to `span`
+ * @param ref - Forwarded ref
+ *
+ * @example
+ * ```
+ * <Badge variant="default">New</Badge>
+ * ```
+ *
+ * @example
+ * ```
+ * <Badge variant="privium" icon={<Icon />}>Privium</Badge>
+ * ```
+ */
+export const Badge = forwardRef<BadgeProps, typeof defaultAs>(
+  ({ children, className, icon, variant = 'default', as = defaultAs, ...props }, ref) => {
+    const Component = as
+
+    return (
+      <Component ref={ref} {...props} className={cx(badgeVariants({ variant }), className)}>
+        {icon ? (
+          <>
+            {cloneElement(icon, {
+              width: 16,
+              height: 16,
+            })}
+          </>
+        ) : null}
+        {children}
+      </Component>
+    )
+  },
+)
+
+Badge.id = 'Badge' // Unique identifier for the component for rendering in Compound Components
+Badge.displayName = 'Badge' // Display name for the component in React DevTools
+````
+
+Resulting in the Badge component
+
+![Example of the Badge component](./images/schiphol-badge.jpg)
+
+Next is the Image component. The Image component is a simple wrapper around the native `img` element, but can be
+adjusted with the Polymorphic component option.
+
+````tsx
+import { twMerge } from 'tailwind-merge'
+
+import { forwardRef } from '../helpers' // A helper function to type forwardRef and create a Polymorphic component
+import { imageVariants, type ImageVariantsProps } from './image-variants' // Styles for different image variants
+
+export interface ImageProps extends ImageVariantsProps {}
+
+const defaultAs = 'img' as const
+
+/**
+ * Image component for displaying images.
+ * Extends the native `img` HTML element.
+ *
+ * @param ratio - Aspect ratio of the image (square, 3:2, 1:1), default is `square`
+ * @param fit - Image fit (contain, cover), default is `cover`
+ * @param ref - Forwarded ref
+ *
+ * @example
+ * ```
+ * <Image src="/path/to/image.jpg" alt="Description of image" />
+ * ```
+ *
+ * @example
+ * ```
+ * <Image src="/path/to/image.jpg" alt="Description of image" ratio="3:2" />
+ * ```
+ */
+export const Image = forwardRef<ImageProps, typeof defaultAs>(
+  ({ children, fit = 'cover', ratio = 'square', className, as = defaultAs, ...props }, ref) => {
+    const Component = as
+
+    return (
+      <Component ref={ref} {...props} className={twMerge(imageVariants({ ratio, fit }), className)}>
+        {children}
+      </Component>
+    )
+  },
+)
+
+Image.id = 'Image' // Unique identifier for the component for rendering in Compound Components
+Image.displayName = 'Image' // Display name for the component in React DevTools
+````
+
+Resulting in the Image component
+
+![Example of the Image component](./images/schiphol-image.jpg)
+
+Now we can create the CardHeader component. The CardHeader component is a simple container that holds the Image and
+Badge components. It is designed to be flexible and can be easily customized to fit different layouts and designs.
+
+````tsx
+import { cloneElement } from 'react'
+
+import { cx } from 'class-variance-authority'
+
+import { filterChildrenOnId, forwardRef, getValidChildren, mapChildren } from '../../helpers' // Helper functions for filtering, mapping, and validating children
+
+export interface CardHeaderProps {}
+
+const defaultAs = 'div' as const
+
+/**
+ * Card header is used to display the main header of a card.
+ * Used in combination with the `Card` component and `Image` and `Badge` components.
+ *
+ * @param children - The content to display in the card header.
+ * @param as - The element to render the card header as. Defaults to a div tag.
+ * @param ref - The ref to attach to the card header.
+ *
+ * @example
+ * ```
+ * <CardHeader>
+ *  <Image src="https://via.placeholder.com/450x500" alt="placeholder" />
+ * </CardHeader>
+ * ```
+ *
+ * @example
+ * ```
+ * <CardHeader>
+ *  <Badge variant="default">Badge</Badge>
+ *  <Image src="https://via.placeholder.com/450x500" alt="placeholder" />
+ * </CardHeader>
+ * ```
+ */
+export const CardHeader = forwardRef<CardHeaderProps, typeof defaultAs>(
+  ({ children, className, as = defaultAs, ...props }, ref) => {
+    const Component = as
+    const validChildren = getValidChildren(children) // Filter out invalid children (null, undefined, etc.)
+
+    // Apply classes to children
+    const clones = mapChildren(validChildren, (child) => {
+      switch (child.type.id) {
+        case 'Badge':
+          return cloneElement(child, {
+            className: cx(
+              'absolute bottom-050 left-050 z-10', // Position the badge in the bottom left corner
+              child.props?.className,
+            ),
+          })
+
+        default:
+          return null
+      }
+    })
+
+    return (
+      <Component ref={ref} {...props} className={cx('relative flex', className)}>
+        {filterChildrenOnId(clones, ['Badge'])}
+        <div className="relative w-full overflow-hidden rounded-small">{filterChildrenOnId(clones, ['Image'])}</div>
+      </Component>
+    )
+  },
+)
+
+CardHeader.id = 'CardHeader'
+CardHeader.displayName = 'CardHeader'
+````
+
+#### Card content
 
 Below the header, the **content** section consists of a collection of multiple items that follow a structured layout.
 All cards feature a **title**, which for this content section is a required component. The opposite is true for the
@@ -572,7 +771,176 @@ and each list item has equal spacing between the elements, which makes them neat
 alignments are important in maintaining the integrity of the card when the amount of its content may change. A clearly
 defined layout grid or utility-based spacing—such as margin or padding classes—will ensure these elements always remain
 consistent, regardless of the content. CSS grid or flexbox is a great choice for handling this layout because it
-provides the necessary structure but keeps the code modular and adaptable.
+provides the necessary structure but keeps the code modular and adaptable. Let's create the Card component.
+
+````tsx
+import { cloneElement } from 'react'
+
+import { cx } from 'class-variance-authority'
+
+import { filterChildrenOnId, forwardRef, getValidChildren, mapChildren } from '../../helpers' // Helper functions for filtering, mapping, and validating children
+
+export interface CardContentProps {}
+
+const defaultAs = 'div' as const
+
+/**
+ * Card content is used to display the main content of a card.
+ * Used in combination with the `Card` component.
+ * Places the `CardTitle` and `CardSubTitle` components at the top of the content.
+ *
+ * @param children - The content to display in the card content. CardTitle is a required child.
+ * @param as - The element to render the card content as. Defaults to a div tag.
+ * @param ref - The ref to attach to the card content.
+ *
+ * @example
+ * ```
+ * <CardContent>
+ *  <CardTitle>Title</CardTitle>
+ *  <CardSubTitle>Sub Title</CardSubTitle>
+ *  <Paragraph>
+ *    For a smoother security check, wear fitted clothing and low shoes.
+ *    That way, you won’t have to take anything off.
+ *  </Paragraph>
+ * </CardContent>
+ * ```
+ *
+ */
+export const CardContent = forwardRef<CardContentProps, typeof defaultAs>(
+  ({ children, className, as = defaultAs, ...props }, ref) => {
+    const Component = as
+    const validChildren = getValidChildren(children) // Filter out invalid children (null, undefined, etc.)
+
+    // Apply classes to children based on their type
+    const clones = mapChildren(validChildren, (child) => {
+      switch (child.type?.id) {
+        case 'Paragraph':
+          return cloneElement(child, {
+            className: cx('line-clamp-3', child.props?.className), // Apply line clamp to paragraph
+          })
+        default:
+          return child // Return the child as is
+      }
+    })
+
+    const title = filterChildrenOnId(clones, ['CardTitle']) // Filter out the CardTitle component
+
+    if (!title.length) {
+      throw new Error('CardContent must contain a CardTitle component') // Throw an error if CardTitle is missing, as it is required
+    }
+
+    return (
+      <Component
+        ref={ref}
+        {...props}
+        className={cx('relative mt-gap-lg w-full flex-1 pr-gap-xl text-color-text-primary', className)}
+      >
+        <div className="flex flex-col gap-gap-xs">{filterChildrenOnId(clones, ['CardTitle', 'CardSubTitle'])}</div>
+        <div className="mt-gap-lg flex max-w-fit flex-col items-start justify-start gap-gap-lg">
+          {filterChildrenOnId(clones, ['CardTitle', 'CardSubTitle'], true)}
+        </div>
+      </Component>
+    )
+  },
+)
+
+CardContent.id = 'CardContent' // Unique identifier for the component for rendering in Compound Components
+CardContent.displayName = 'CardContent' // Display name for the component in React DevTools
+````
+
+Finally, the Card component. The Card component is the main container that holds the CardHeader and CardContent
+components. It is designed to be flexible and can be easily customized to fit different layouts and designs.
+
+````tsx
+import { cloneElement } from 'react'
+
+import { cx } from 'class-variance-authority'
+
+import { filterChildrenOnId, forwardRef, getValidChildren, mapChildren, sortChildren } from '../helpers' // Helper functions for filtering, mapping, and validating children
+import { cardHeaderVariants, type CardHeaderVariantsProps } from './header/card-header-variants' // Styles for different card header variants
+
+export interface CardProps extends CardHeaderVariantsProps {}
+const defaultAs = 'section' as const
+
+/**
+ * A card is used to display content in a structured manner.
+ * Used in combination with the `CardHeader` and `CardContent` components.
+ *
+ * @param children - The content to display in the card.
+ * @param as - The element to render the card as. Defaults to a section tag.
+ * @param ref - The ref to attach to the card.
+ *
+ * @example
+ * ```
+ * <Card>
+ *  <CardHeader>
+ *    <Image src="https://via.placeholder.com/450x500" alt="placeholder" />
+ *  </CardHeader>
+ *  <CardContent>
+ *    <CardTitle>Title</CardTitle>
+ *    <CardSubTitle>Sub Title</CardSubTitle>
+ *    <Paragraph>
+ *      For a smoother security check, wear fitted clothing and low shoes.
+ *      That way, you won’t have to take anything off.
+ *    </Paragraph>
+ *  </CardContent>
+ * </Card>
+ * ```
+ */
+export const Card = forwardRef<CardProps, typeof defaultAs>(
+  ({ children, className, as = defaultAs, background = 'on-white', intent = 'default', ...props }, ref) => {
+    const Component = as
+    const validChildren = getValidChildren(children)
+
+    // Apply classes to children (mainly image)
+    // We always place the CardContent first, then the CardHeader
+    // Filter the children to only include CardContent and CardHeader
+    const clones = sortChildren(
+      filterChildrenOnId(
+        mapChildren(validChildren, (child) => {
+          switch (child.type?.id) {
+            case 'CardHeader':
+              return cloneElement(child, {
+                className: cx('rounded-small', cardHeaderVariants({ background, intent }), child.props?.className),
+              })
+            default:
+              return child
+          }
+        }),
+        ['CardContent', 'CardHeader'],
+      ),
+      (a, b) => {
+        if (a.type.id === 'CardContent') {
+          return -1
+        }
+        if (b.type.id === 'CardContent') {
+          return 1
+        }
+        return 0
+      },
+    )
+
+    return (
+      <Component
+        ref={ref}
+        {...props}
+        className={cx(
+          'group flex flex-col-reverse no-underline',
+          'focus:outline-color-border-focus-on-white',
+          'focus:border-color-border-focus-on-white',
+          'outline-none outline-offset-0 focus:outline',
+          className,
+        )}
+      >
+        {clones}
+      </Component>
+    )
+  },
+)
+
+Card.id = 'Card' // Unique identifier for the component for rendering in Compound Components
+Card.displayName = 'Card' // Display name for the component in React DevTools
+````
 
 With a full understanding of how this card is structured, let's think about how the API for this component would Look in
 a frontend application. Since a card is divided into reusable sections, header, badge, image, title, subtitle, and
@@ -733,4 +1101,8 @@ export function ContactCard() {
     </Card>
   )
 }
+```
+
+```
+
 ```
