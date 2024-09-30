@@ -265,8 +265,13 @@ provides and extend it to offer more flexibility and adaptability.
 Compound Components, which are based on the Composite Pattern in software development, take the idea of grouping
 individual objects into tree structures and apply it to frontend development. In this pattern, the parent component
 plays a central role, managing shared state and logic, while child components handle specific tasks like rendering
-content or handling user input. Think of this more like an orchestra, where the parent is the conductor and ensures
-everything is in tune and all moving parts work together in harmony.
+content or handling user input.
+
+![Composite pattern](./images/compound-pattern-order.png)
+
+As seen in this example we see a complex order contains multiple boxes, each containing their own items inside. A box on
+itself can contain a new box, following the composite pattern. In the end a box can contain a single item, which is the
+leaf of the tree.
 
 The main difference-and where Compound Components improve on Atomic Design-is in how they handle the relationships
 between components. In Atomic Design, components are often defined as isolated pieces that fit into strict categories,
@@ -1103,6 +1108,4 @@ export function ContactCard() {
 }
 ```
 
-```
-
-```
+## Conclusion
