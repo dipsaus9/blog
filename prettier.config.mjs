@@ -5,7 +5,7 @@
  * @type {import("prettier").Config}
  */
 const config = {
-  printWidth: 120,
+  printWidth: 50000,
   proseWrap: 'always',
   semi: false,
   singleQuote: true,
