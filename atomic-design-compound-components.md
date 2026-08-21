@@ -1,3 +1,10 @@
+---
+title: 'Atomic Design: Breaking Up is Hard to Do, Enter Compound Components!'
+date: 2024-09-05
+tags: [atomic-design, compound-components, react, frontend]
+slug: atomic-design-compound-components
+---
+
 # Atomic Design: Breaking Up is Hard to Do, Enter Compound Components!
 
 If you've been around the frontend development scene for a while, you'd likely be familiar with Atomic Design. You know, that slick, really systemized approach to building UI components to make everything feel and look modular, reusable, and oh-so consistent. And it really does deliver on these expectations — at least in simpler projects where design and interactions are rather straightforward.
@@ -201,7 +208,7 @@ From my experience, Atomic Design proved to be an excellent basis for creating U
 
 Compound Components, which are based on the Composite Pattern in software development, take the idea of grouping individual objects into tree structures and apply it to frontend development. In this pattern, the parent component plays a central role, managing shared state and logic, while child components handle specific tasks like rendering content or handling user input.
 
-![Composite pattern](./images/compound-pattern-order.png)
+![Composite pattern](images/atomic-design-compound-components/compound-pattern-order.png)
 
 As seen in this example we see a complex order contains multiple boxes, each containing their own items inside. A box on itself can contain a new box, following the composite pattern. In the end a box can contain a single item, which is the leaf of the tree.
 
@@ -383,17 +390,17 @@ Think of designing UI components like putting together a car. A small component,
 
 Let's break down a card component into smaller, reusable parts. This example is from our Schiphol website and design system.
 
-![Main card Schiphol design system](./images/schiphol-main-card.jpg)
+![Main card Schiphol design system](images/atomic-design-compound-components/schiphol-main-card.jpg)
 
 Compared to other interactive active components, such as tabs that involve active states and user input handling, this is a purely presentational component. This avoids complicated state management but offers invaluable lessons in how best to structure and arrange content in a consistent, reusable manner. The Card has two main, well-defined regions: the **header** and the **content**. Both are designed for specific purposes and include specific layout directives that foster flexibility in various applications while ensuring continuity.
 
-![Card breakdown Schiphol design system](./images/schiphol-main-card-divided.jpg)
+![Card breakdown Schiphol design system](images/atomic-design-compound-components/schiphol-main-card-divided.jpg)
 
 #### Card header
 
 Starting with the header, there are two key elements: an image and a badge. The image is the dominant visual asset, and it typically spans the width of the card, providing a strong visual hook. The **badge**, on the other hand, acts as a label or status indicator and is consistently positioned in the same fixed spot—usually in one of the corners of the image. This badge placement ensures that, no matter the variation in content or image size, the badge remains visible and clearly conveys important information to the user.
 
-![Example of the Card header](./images/schiphol-card-header.jpg)
+![Example of the Card header](images/atomic-design-compound-components/schiphol-card-header.jpg)
 
 #### Header in code
 
@@ -457,7 +464,7 @@ Badge.displayName = 'Badge' // Display name for the component in React DevTools
 
 Resulting in the Badge component
 
-![Example of the Badge component](./images/schiphol-badge.jpg)
+![Example of the Badge component](images/atomic-design-compound-components/schiphol-badge.jpg)
 
 Next is the Image component. The Image component is a simple wrapper around the native `img` element, but can be adjusted with the Polymorphic component option.
 
@@ -505,7 +512,7 @@ Image.displayName = 'Image' // Display name for the component in React DevTools
 
 Resulting in the Image component
 
-![Example of the Image component](./images/schiphol-image.jpg)
+![Example of the Image component](images/atomic-design-compound-components/schiphol-image.jpg)
 
 Now we can create the CardHeader component. The CardHeader component is a simple container that holds the Image and Badge components. It is designed to be flexible and can be easily customized to fit different layouts and designs.
 
@@ -579,7 +586,7 @@ CardHeader.displayName = 'CardHeader'
 
 Below the header, the **content** section consists of a collection of multiple items that follow a structured layout. All cards feature a **title**, which for this content section is a required component. The opposite is true for the **subtitle**, which may optionally appear. It might show up underneath the title on a particular card variation, or lower in the card - perhaps underneath supplemental text or a list of items. Each possible placement of the subtitle comes with its own styling rules, ensuring that even though the placement varies, the card maintains visual consistency and readability. Within the content section the developer can add any predefined content, such as a list of items, a paragraph of text, or a button. These content items are flexible and can be arranged in any order, allowing for a variety of card layouts while maintaining a consistent visual style.
 
-![Example of the Card content](./images/schiphol-card-content.jpg)
+![Example of the Card content](images/atomic-design-compound-components/schiphol-card-content.jpg)
 
 One of the most important aspects of the content section is the fact that every element, starting from the text links down to the list items to price information, all have a fixed spacing and layout structure. For instance, each text link and each list item has equal spacing between the elements, which makes them neat and organized. These fixed spacings and alignments are important in maintaining the integrity of the card when the amount of its content may change. A clearly defined layout grid or utility-based spacing—such as margin or padding classes—will ensure these elements always remain consistent, regardless of the content. CSS grid or flexbox is a great choice for handling this layout because it provides the necessary structure but keeps the code modular and adaptable.
 
@@ -709,7 +716,7 @@ By this setup we can easily create variations of the card with different content
 
 An article card
 
-![Article card](./images/schiphol-article-card.jpg)
+![Article card](images/atomic-design-compound-components/schiphol-article-card.jpg)
 
 ```tsx
 export function ArticleCard() {
@@ -734,7 +741,7 @@ export function ArticleCard() {
 
 A product card
 
-![Product card](./images/schiphol-parking-card.jpg)
+![Product card](images/atomic-design-compound-components/schiphol-parking-card.jpg)
 
 ```tsx
 export function ProductCard() {
@@ -773,7 +780,7 @@ export function ProductCard() {
 
 And even a contact card
 
-![Contact card](./images/schiphol-contact-card.jpg)
+![Contact card](images/atomic-design-compound-components/schiphol-contact-card.jpg)
 
 ```tsx
 export function ContactCard() {

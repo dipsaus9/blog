@@ -1,16 +1,23 @@
+---
+title: 'From Atoms to Excellence: Elevate Your Design System with Atomic design Principles'
+date: 2023-09-01
+tags: [atomic-design, design-systems]
+slug: from-atoms-to-excellence
+---
+
 # From Atoms to Excellence: Elevate Your Design System with Atomic design Principles
 
 Design systems are gaining traction, and rightfully so. A design system elevates your way of working and improves consistency across all applications. So how do you structure your design system properly? By using atomic design principles. In this article, I'll dive into how to do this.
 
 Table of contents:
 
--   [Setting the Foundation: Importance of Structure in Design systems](#setting-the-foundation-importance-of-structure-in-design-systems)
--   [Understanding Atomic design](#understanding-atomic-design)
--   [Atomic design in Action](#atomic-design-in-action)
--   [From Atoms to Functionality](#from-atoms-to-functionality)
--   [Designing with purpose](#designing-with-purpose)
--   [Atomic design in Perspective](#atomic-design-in-perspective)
--   [The Atomic Way Forward](#the-atomic-way-forward)
+- [Setting the Foundation: Importance of Structure in Design systems](#setting-the-foundation-importance-of-structure-in-design-systems)
+- [Understanding Atomic design](#understanding-atomic-design)
+- [Atomic design in Action](#atomic-design-in-action)
+- [From Atoms to Functionality](#from-atoms-to-functionality)
+- [Designing with purpose](#designing-with-purpose)
+- [Atomic design in Perspective](#atomic-design-in-perspective)
+- [The Atomic Way Forward](#the-atomic-way-forward)
 
 ## Setting the Foundation: Importance of Structure in Design systems
 
@@ -28,7 +35,7 @@ At its core, atomic design breaks down into five hierarchical levels: atoms, mol
 
 Moving up the hierarchy, we encounter organisms. Organisms are groups of molecules that work together to create sections or functional units within a design, for example a header or a complete form. Templates come next, providing the overarching layout structure for various pages. Finally, pages represent the specific instances where templates are populated with real content.
 
-![Atomic design example](images/from-atoms-to-excellence/atomic-design-process.jpeg)
+![Atomic design example](images/from-atoms-to-excellence/atomic-design-process.png)
 
 This organized method goes beyond just putting things into categories. It actually helps to make different parts that can be used again and again, like building blocks. For example, a basic piece like a button can be used in lots of different parts, like small sections and bigger layouts. This keeps everything the same and makes it quicker to build things.
 
@@ -46,8 +53,7 @@ Atomic design tells our architects and builders (designers and developers) how t
 
 ## Atomic design in Action
 
-So, what's the connection between atomic design and what we do every day?
-Well, it's like building with LEGO bricks. We start with tiny pieces, like individual LEGO bricks, and we combine them to make bigger structures. Similarly, atomic design breaks down design into small building blocks called "atoms," which we put together to create larger structures.
+So, what's the connection between atomic design and what we do every day? Well, it's like building with LEGO bricks. We start with tiny pieces, like individual LEGO bricks, and we combine them to make bigger structures. Similarly, atomic design breaks down design into small building blocks called "atoms," which we put together to create larger structures.
 
 Let's take a closer look at how this works. Imagine you have a button – a simple atom. It's like painting a LEGO brick a certain color. No matter where we put this button, its color and size stay the same, just like how a painted LEGO brick looks the same no matter where you use it. Besides color, an atom like this button can have multiple properties. Now, we can use the HTML's border-box model to give this button its own unique style. This model shows how an atom will react as a standalone element. Just like a LEGO brick, an atom can not have properties that will affect other atoms, it’s a standalone element.
 
@@ -67,11 +73,11 @@ For this example we will write a simple breadcrumb molecule that consists of alr
 import type { ReactNode } from 'react'
 
 type BreadcrumbListProps = {
-    children: ReactNode
+  children: ReactNode
 }
 
 export function BreadcrumbList({ children }: BreadcrumbListProps) {
-    return <div className="breadcrumb-list">{children} // This is where our Atoms will be glued together, but how?</div>
+  return <div className="breadcrumb-list">{children} // This is where our Atoms will be glued together, but how?</div>
 }
 ```
 
@@ -90,30 +96,30 @@ import { BreadcrumbDivider } from './BreadcrumbDivider'
  * @param children the children
  */
 function getValidChildren(children: ReactNode) {
-    return Children.toArray(children).filter((child) => isValidElement(child)) as ReactElement[]
+  return Children.toArray(children).filter((child) => isValidElement(child)) as ReactElement[]
 }
 
 interface BreadcrumbItemProps {
-    children: ReactNode
+  children: ReactNode
 }
 
 export function BreadcrumbItem({ children }: BreadcrumbItemProps) {
-    const validChildren = getValidChildren(children)
-    const totalItems = validChildren.length
+  const validChildren = getValidChildren(children)
+  const totalItems = validChildren.length
 
-    const clones = validChildren.map((child, index) =>
-        cloneElement(child, {
-            children: (
-                <>
-                    {child?.props?.children || null}
-                    {index < totalItems - 1 && <BreadcrumbDivider />}
-                </>
-            ),
-            className: clsx('some-custom-breadcrumb-item-styling', child?.props?.className) // Here we can provide extra properties as glue to our atoms
-        })
-    )
+  const clones = validChildren.map((child, index) =>
+    cloneElement(child, {
+      children: (
+        <>
+          {child?.props?.children || null}
+          {index < totalItems - 1 && <BreadcrumbDivider />}
+        </>
+      ),
+      className: clsx('some-custom-breadcrumb-item-styling', child?.props?.className), // Here we can provide extra properties as glue to our atoms
+    }),
+  )
 
-    return <div className="breadcrumb-item">{clones}</div>
+  return <div className="breadcrumb-item">{clones}</div>
 }
 ```
 
@@ -126,19 +132,19 @@ import { BreadcrumbList } from './BreadcrumbList'
 import { BreadcrumbItem } from './BreadcrumbItem'
 
 function BreadcrumbsView() {
-    return (
-        <BreadcrumbList>
-            <BreadcrumbItem>
-                <a href="/">Home</a>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-                <a href="/about">About</a>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-                <a href="/contact">Contact</a>
-            </BreadcrumbItem>
-        </BreadcrumbList>
-    )
+  return (
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <a href="/">Home</a>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <a href="/about">About</a>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <a href="/contact">Contact</a>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  )
 }
 ```
 
