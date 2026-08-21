@@ -46,18 +46,19 @@ Intro paragraph: hook the reader, state what the article covers and what they'll
 
 ## Voice & style
 
-Match the existing posts. Key traits:
+**[STYLE.md](STYLE.md) is the single source of truth for voice.** Read it in full before drafting, editing or reviewing a post. Do not restate or re-derive the style rules here — they live there and only there.
 
-- **First person, conversational.** "In my opinion…", "I'll dive into…", "Let's take a closer look." Address the reader directly as "you".
-- **Lead with a hook, then a roadmap.** The intro tells the reader what's coming and why it matters.
-- **Analogies carry the explanation.** The posts lean on real-world analogies (a city's roads and neighborhoods; the periodic table; subatomic particles). Use a concrete analogy to introduce an abstract concept, then connect it back.
-- **Opinionated but generous.** Take a clear stance ("a design system is a way of working"), but link out to and credit other sources fairly.
-- **Bold key terms** on first meaningful use. Use numbered/bulleted lists for benefits and enumerations.
-- **Blockquotes for definitions** — the money-quote definition of a concept goes in a `>` blockquote.
-- **Code with a lead-in.** Every code block is introduced by a sentence saying what it shows. Code examples are TypeScript/React (`tsx`) or `scss`.
-- **Link out inline** with Markdown links to sources, tools, and prior articles.
+The short version, so you know what you're aiming at:
 
-Avoid: filler and hype, unexplained jargon, walls of text without a subheading, code blocks dropped in without explanation.
+- Open on a real-world analogy, never on context or a roadmap sentence.
+- One analogy per post, running through every section, dropped explicitly when it stops explaining.
+- "you" is the dominant pronoun; "I" appears for opinions, real decisions and mistakes.
+- Code builds up piece by piece, each block with a short lead-in.
+- Every stance names the case where it doesn't hold.
+- Close by cashing in the analogy, then a short recap.
+- Plain vocabulary. Mean sentence 14–17 words, with short sentences doing real work.
+- Blockquotes for definitions; bold key terms on first use only.
+- Run the anti-AI checklist in STYLE.md before publishing.
 
 ## Formatting
 

@@ -10,7 +10,8 @@ A collection of blogs I've written over the years, mostly about design systems, 
 ├── images/
 │   └── <post-slug>/            # images for a post live in a folder named after its slug
 │       └── *.jpg|png|svg
-├── CLAUDE.md                   # voice + conventions for AI-assisted writing
+├── STYLE.md                    # personal writing style guide (the voice spec)
+├── CLAUDE.md                   # conventions for AI-assisted writing
 ├── .claude/commands/           # authoring slash commands (/new-blog, /review-blog)
 └── prettier.config.mjs         # formatting rules
 ```
@@ -18,7 +19,8 @@ A collection of blogs I've written over the years, mostly about design systems, 
 ## Conventions
 
 - **One file per post** at the repo root, named in `kebab-case.md` (e.g. `what-is-a-design-system.md`).
-- **New posts** start with a YAML frontmatter block, then `# Title`, an intro, and a table of contents. See [CLAUDE.md](CLAUDE.md) for the full style guide.
+- **New posts** start with a YAML frontmatter block, then `# Title`, an intro, and a table of contents.
+- **Voice is specified in [STYLE.md](STYLE.md)** — analogy-led openings, one sustained metaphor per post, second-person teaching, incremental code, stances with carve-outs. It also carries an anti-AI checklist to run before publishing.
 - **Images** go in `images/<post-slug>/` and are referenced with relative paths and descriptive alt text: `![alt](images/<slug>/name.png)`.
 
 ## Writing a new post

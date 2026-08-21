@@ -7,7 +7,7 @@ You are helping Dennis start a new blog post for this repo. The topic/angle is:
 
 $ARGUMENTS
 
-Read `CLAUDE.md` first for the full voice and structure guide, then:
+Read `STYLE.md` in full first — it is the voice specification and is not optional. Read `CLAUDE.md` for the file and formatting conventions. Then:
 
 1. **Settle the essentials** (ask only if genuinely ambiguous — otherwise pick sensible defaults and state them):
    - A working `title` (Human Readable).
@@ -20,8 +20,12 @@ Read `CLAUDE.md` first for the full voice and structure guide, then:
 
 3. **Create the image folder** `images/<slug>/` (add a `.gitkeep` if it would otherwise be empty). Wherever the post would benefit from a visual, insert a Markdown image reference to `images/<slug>/<name>.png` and leave a `<!-- TODO: image -->` comment. Do not fabricate image files.
 
-4. **Draft in the blog voice**: first person, conversational, analogy-driven, opinionated. Lead each code block with an explanatory sentence. Prose is one line per paragraph (no manual wrapping).
+4. **Pick the analogy before writing a single section.** One real-world analogy carries the whole post. Propose it to Dennis with an analogy → section mapping before drafting the body, and say plainly where you expect it to break down.
 
-5. **Format**: run `npm run format:fix`.
+5. **Draft against `STYLE.md`**: open on the analogy (no roadmap sentence, no "In this article"), teach in second person, build code up piece by piece with a lead-in per block, take at least one stance with an honest carve-out, and close by returning to the analogy followed by a short recap. Target 1,500–2,500 words, ~6 sections, 2–4 code blocks, at most 2 lists. Prose is one line per paragraph (no manual wrapping).
 
-6. **Report** what you created, which sections are still stubs, and which images Dennis needs to supply.
+6. **Self-check against the anti-AI checklist in `STYLE.md`** and fix what it catches before reporting.
+
+7. **Format**: run `npm run format:fix`.
+
+8. **Report** what you created, which sections are still stubs, and which images Dennis needs to supply.
