@@ -1,6 +1,6 @@
 # Writing style — Dennis (Dipsaus)
 
-This is my personal writing style reference. Every new post follows it. It was built by measuring my own published posts, not from a generic template — the numbers below are what I actually do, and the rules are the choices I made deliberately.
+This is my personal writing style reference. Every new post follows it. It was built by measuring my own published posts, not from a generic template. Most of the numbers below are what I already do. A few are deliberate corrections to it, and those say so where they appear.
 
 Read this before drafting or reviewing anything in this repo.
 
@@ -10,19 +10,23 @@ I explain an abstract frontend idea by running a single real-world analogy throu
 
 ## Voice fingerprint
 
-Measured across my four published posts (9,447 words). These are targets, not trivia — a draft that misses them badly is not in my voice.
+Measured across my four published posts (9,447 words), except the paragraph rows, which are a correction to them. These are targets, not trivia. A draft that misses them badly is not in my voice.
 
-| Marker                  | Target                  | Why                                                                                       |
-| ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------- |
-| Mean sentence length    | 14–17 words             | My 2023 posts sat at 12.5–15.3. The 2024 post drifted to 19.9 and reads flatter.          |
-| Sentences under 8 words | ~18% of all sentences   | The punch lines. AI writing almost never does this.                                       |
-| Sentences over 30 words | under 5%                | If it needs 30 words, it's two sentences.                                                 |
-| "you" / "your"          | 18–27 per 1k words      | The dominant pronoun. I'm teaching, not narrating.                                        |
-| "I"                     | 2–4 per 1k words        | Present, but not the subject. It shows up for opinions and mistakes.                      |
-| Analogy hits            | 4–9 per 1k words        | The signature move. `from-atoms-to-excellence` hit 9.2 and it's my most distinctive post. |
-| Contractions            | 5–8 per 1k words        | Conversational, not chatty.                                                               |
-| Ellipses (`...`)        | zero                    | I've never used one. Don't start.                                                         |
-| Hedges vs assertions    | assertions ~2.5x hedges | Opinionated.                                                                              |
+| Marker                     | Target                   | Why                                                                                                                      |
+| -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Sentences per paragraph    | 4.5–6 average            | A paragraph carries a piece of the story. Three sentences is a statement, not an argument.                               |
+| Paragraph length spread    | standard deviation ≥ 1.5 | This is the one that matters. My posts run 1.5–2.4. Uniform paragraphs read mechanically even when the average is right. |
+| Most common paragraph size | under 35% of paragraphs  | If half the post is 5-sentence paragraphs, the rhythm is machine-made. Spread across 2 to 10.                            |
+| Mean sentence length       | 14–17 words              | My 2023 posts sat at 12.5–15.3. The 2024 post drifted to 19.9 and reads flatter.                                         |
+| Sentences under 8 words    | under 10% of sentences   | The punch lines. They land inside a paragraph, never as one. A run of them reads like slogans.                           |
+| One-sentence paragraphs    | 0–2 in a whole post      | Isolating a line says "this matters". Do it six times and it says nothing.                                               |
+| Sentences over 30 words    | under 5%                 | If it needs 30 words, it's two sentences.                                                                                |
+| "you" / "your"             | 18–27 per 1k words       | The dominant pronoun. I'm teaching, not narrating.                                                                       |
+| "I"                        | 2–4 per 1k words         | Present, but not the subject. It shows up for opinions and mistakes.                                                     |
+| Analogy hits               | 4–9 per 1k words         | The signature move. `from-atoms-to-excellence` hit 9.2 and it's my most distinctive post.                                |
+| Contractions               | 5–8 per 1k words         | Conversational, not chatty.                                                                                              |
+| Ellipses (`...`)           | zero                     | I've never used one. Don't start.                                                                                        |
+| Hedges vs assertions       | assertions ~2.5x hedges  | Opinionated.                                                                                                             |
 
 **Length:** 1,500–2,500 words. About 6 sections. 2–4 code blocks. 1–2 lists in the entire post. At least one diagram or screenshot.
 
@@ -111,13 +115,37 @@ Never end on "The future looks bright", "Only time will tell", or "As we move fo
 
 ## Sentence rhythm
 
-Build a longer explanatory sentence, then cut it off with a very short one. The contrast is the effect.
+Build a longer explanatory sentence, then cut it off with a very short one. The contrast is the effect, and it happens inside the paragraph, not by breaking one out.
 
-> A design token is a decision with a name, and the whole point is that the value underneath it can move without the name moving with it. That's the contract.
+> A design token is a decision with a name, and the whole point is that the value underneath it can move without the name moving with it. That's the contract. Break it and your team stops trusting the system.
+
+## Paragraph rhythm
+
+Write paragraphs the way a book does. A paragraph carries a piece of the story, so it needs room to set something up, show it happening and land it. Most of mine should run five or six sentences, and the good ones run longer than that. This is the one place in this document where the numbers are not a measurement of my published posts. They are a correction, because my old posts fragment more than I want them to.
+
+The failure I keep falling into is not choppy sentences. It is choppy paragraphs: a run of one-line declarations stacked down the page, each sitting on its own with white space around it.
+
+> Nobody had checked.
 >
-> Break it and your team stops trusting the system.
+> The knowledge that is hardest to hand over is the knowledge you forgot you had.
+>
+> You cannot ask it whether it understood.
 
-Vary paragraph length too. A one-sentence paragraph is allowed and should appear a few times per post. Uniform paragraph size is an AI tell.
+Every one of those is a decent sentence and the sequence is exhausting. Putting a line on its own is how you tell the reader it matters, so doing it six times in an article tells them nothing at all. It also reads like a conference slide or a LinkedIn post, which is the register I am trying hardest to stay out of. The short line still belongs in the post. It belongs inside the paragraph, where the sentences around it earn it, and the standalone version gets saved for a genuine turn in the argument once or twice per article.
+
+The test is whether the paragraph is doing something. Walking through what happened, building a case, working an example, admitting where it went wrong. If it is one assertion in a box, it is a slogan, and it should be folded into the paragraph above or below it.
+
+The other way to get this wrong is uniformity. You notice the problem, you start writing everything at five sentences, and the result is more mechanical than what you started with, because no human thinks in evenly sized units. So check the spread, not the average. Paragraphs of two and paragraphs of ten belong in the same post, and if one length accounts for more than a third of it the rhythm has gone flat.
+
+## Every paragraph earns its place
+
+Cut anything that does not carry weight. This matters more than any metric on this page.
+
+For every paragraph, name the one thing it adds: a fact, a turn in the argument, an objection, a concrete example. If you cannot name it, the paragraph is restating the one before it in fresh words, which is the single most common way a draft gets longer without getting better. Delete it and the post improves.
+
+The same test applies inside a sentence. A clause that only softens, or re-announces what is coming, or tells the reader that something is interesting instead of being interesting, is padding. Cut the frame and keep the content.
+
+Short is not the goal. Dense is. A 2,500-word post where every paragraph moves is a better read than a 1,200-word one padded with transitions.
 
 ## Vocabulary
 
@@ -167,7 +195,8 @@ Run this before publishing. These are the patterns that make writing read as mac
 
 - Em dashes: keep them rare. One or two per post, not per paragraph.
 - Rule of three everywhere — "fast, reliable, and scalable". Vary the groupings, use two or four sometimes.
-- Uniform paragraph length — deliberately mix one-sentence paragraphs with longer ones.
+- Statement stacking — several one-line paragraphs in a row, each landing a point. Fold them into the paragraphs around them.
+- Uniform paragraph length — mix short paragraphs with long ones, but do the mixing at two sentences and up.
 - Bullet lists of bare noun phrases — convert to prose.
 - Bold overuse — bold key terms on first use only, not for emphasis mid-paragraph.
 - Title Case Headings — sentence case only.
@@ -198,6 +227,6 @@ Useful when I need a reference point for a specific move, not people to imitate 
 5. Is there at least one clear stance with an honest carve-out?
 6. Do I admit at least one mistake of my own?
 7. Does the ending return to the analogy, then recap briefly?
-8. Are there short sentences doing real work? Any paragraph of only one sentence?
+8. Do the paragraphs tell a story rather than stack statements? No more than two standalone one-sentence paragraphs?
 9. Anti-AI checklist clean?
 10. `npm run format:fix` run?
