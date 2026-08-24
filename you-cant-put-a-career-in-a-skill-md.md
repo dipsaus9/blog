@@ -55,7 +55,7 @@ What I could not do was answer the next question, which is whether any of it lan
 
 ![A four-step loop: write the standard, the agent writes code, check what actually changed, correct the standard, and round again](images/you-cant-put-a-career-in-a-skill-md/the-loop.jpeg)
 
-So you go and check, and checking is harder than it sounds. You can't assert `toEqual` on a code review. Run the same review twice and you get two wordings, two orderings, and sometimes a finding that shows up once and never again. Everything you know about testing was built for systems that do the same thing twice, and very little of it survives contact with one that does not. That is not a good enough reason to skip it. It is a good enough reason that almost nobody publishes numbers, because writing the file keeps feeling like progress while measuring it feels like admitting you can't tell.
+So you go and check, and checking is harder than it sounds. Every test I have ever written assumes the thing under test does the same thing twice. Same input, same output, green or red, and `toEqual` settles the argument. You can't assert `toEqual` on a code review. Run the same review twice and you get two wordings, two orderings, and sometimes a finding that shows up once and never again. That is not a good enough reason to skip it. It is a good enough reason that almost nobody publishes numbers, because writing the file keeps feeling like progress while measuring it feels like admitting you can't tell.
 
 ## Come along
 
