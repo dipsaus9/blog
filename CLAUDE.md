@@ -56,6 +56,8 @@ The short version, so you know what you're aiming at:
 - Code builds up piece by piece, each block with a short lead-in.
 - Every stance names the case where it doesn't hold.
 - Close by cashing in the analogy, then a short recap.
+- Clauses join on a word that names the relationship — `because`, `when`, `while` — not on `and`. Never two `, and` joins in one sentence.
+- Vary how sentences open. Never three in a row starting on `The`, `You` or `It`.
 - Plain vocabulary. Mean sentence 14–17 words, with short sentences doing real work.
 - Blockquotes for definitions; bold key terms on first use only.
 - Run the anti-AI checklist in STYLE.md before publishing.

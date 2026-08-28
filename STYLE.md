@@ -6,11 +6,11 @@ Read this before drafting or reviewing anything in this repo.
 
 ## The one-line version
 
-I explain an abstract frontend idea by running a single real-world analogy through the whole post, talking directly to the reader as "you", building the code up piece by piece, and taking a clear stance that admits where it breaks.
+I explain an abstract frontend idea by running a single real-world analogy through the whole post, talking directly to the reader as "you", building the code up piece by piece, and taking a clear stance that admits where it breaks. Clauses join on words that name a relationship, not on `and`.
 
 ## Voice fingerprint
 
-Measured across my four published posts (9,447 words), except the paragraph rows, which are a correction to them. These are targets, not trivia. A draft that misses them badly is not in my voice.
+Measured across my four published posts (9,447 words), except the paragraph rows, which are a correction to them. The clause-join row is a measurement too, but of the older four only — my recent posts fail it. These are targets, not trivia. A draft that misses them badly is not in my voice.
 
 | Marker                     | Target                   | Why                                                                                                                      |
 | -------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
@@ -21,6 +21,7 @@ Measured across my four published posts (9,447 words), except the paragraph rows
 | Sentences under 8 words    | under 10% of sentences   | The punch lines. They land inside a paragraph, never as one. A run of them reads like slogans.                           |
 | One-sentence paragraphs    | 0–2 in a whole post      | Isolating a line says "this matters". Do it six times and it says nothing.                                               |
 | Sentences over 30 words    | under 5%                 | If it needs 30 words, it's two sentences.                                                                                |
+| Clauses joined with `, and/but/so` | under 15% of sentences | My four design-system posts sit at 13%. The two AI posts drifted to 26% and 34%, and that is what makes them hard work. |
 | "you" / "your"             | 18–27 per 1k words       | The dominant pronoun. I'm teaching, not narrating.                                                                       |
 | "I"                        | 2–4 per 1k words         | Present, but not the subject. It shows up for opinions and mistakes.                                                     |
 | Analogy hits               | 4–9 per 1k words         | The signature move. `from-atoms-to-excellence` hit 9.2 and it's my most distinctive post.                                |
@@ -119,6 +120,44 @@ Build a longer explanatory sentence, then cut it off with a very short one. The 
 
 > A design token is a decision with a name, and the whole point is that the value underneath it can move without the name moving with it. That's the contract. Break it and your team stops trusting the system.
 
+## How clauses join
+
+This is the rule I was missing for a long time, and it decides more than any length target on this page. Two sentences can hit every number in the fingerprint and still be exhausting to read, because length is not what tells a reader how ideas connect. The join is.
+
+`and` states no relationship. It sets two things side by side and leaves you to work out why they are next to each other. `because`, `when`, `while`, `if`, `since` and `so that` all name the relationship, so the reader gets the logic for free instead of reconstructing it.
+
+> Skill-arm refactors are bigger jobs, and the limit was killing the arm I was trying to measure.
+>
+> Because skill-arm refactors are bigger jobs, the limit was killing the arm I was trying to measure.
+
+Same facts, same length, and only the second one has an argument in it.
+
+**The test:** if `and` could be swapped for `because`, `when`, `while` or `so that` without changing the meaning, swap it. If none of them fit, the two clauses are unrelated and belong in separate sentences.
+
+**Never two coordinating joins in one sentence.** Three clauses chained on commas and `and` is a run-on whatever its word count, because nothing in it says which idea depends on which:
+
+> Your rules come first, long before any test exists, and they're usually the arguments you've already been having in code review, and mine are three.
+
+Front-load the circumstance instead and let the main clause land at the end:
+
+> Long before any test exists, you already have the rules. They are the arguments you have been having in code review for years. Mine come down to three.
+
+This is also the fix for a draft that reads flat after an editing pass. Merging short sentences with `, and` lowers the choppiness numbers while making the prose harder to follow, which is the trap: the metrics improve and the writing gets worse.
+
+## Vary how sentences open
+
+Never three sentences in a row opening on the same kind of subject. A run of `The...`, `You...`, `It...` flattens a paragraph even when every sentence in it is well built, and it is the fastest tell that a draft was assembled rather than written.
+
+The fix is the move above. Put the circumstance, the condition or the timing first, then let the main clause land:
+
+> The limit was killing the arm I was trying to measure.
+>
+> Because skill-arm refactors are bigger jobs, the limit was killing the arm I was trying to measure.
+>
+> Long before any test exists, you already have the rules.
+
+Do not count these. Read the paragraph aloud and listen for the three-in-a-row.
+
 ## Paragraph rhythm
 
 Write paragraphs the way a book does. A paragraph carries a piece of the story, so it needs room to set something up, show it happening and land it. Most of mine should run five or six sentences, and the good ones run longer than that. This is the one place in this document where the numbers are not a measurement of my published posts. They are a correction, because my old posts fragment more than I want them to.
@@ -195,6 +234,8 @@ Run this before publishing. These are the patterns that make writing read as mac
 
 - Em dashes: keep them rare. One or two per post, not per paragraph.
 - Rule of three everywhere — "fast, reliable, and scalable". Vary the groupings, use two or four sometimes.
+- Chained coordination — two `, and` joins carrying three clauses in one sentence. Split it, or subordinate one clause to another.
+- Subject-first runs — three sentences in a row opening on `The`, `You` or `It`.
 - Statement stacking — several one-line paragraphs in a row, each landing a point. Fold them into the paragraphs around them.
 - Uniform paragraph length — mix short paragraphs with long ones, but do the mixing at two sentences and up.
 - Bullet lists of bare noun phrases — convert to prose.
@@ -228,5 +269,7 @@ Useful when I need a reference point for a specific move, not people to imitate 
 6. Do I admit at least one mistake of my own?
 7. Does the ending return to the analogy, then recap briefly?
 8. Do the paragraphs tell a story rather than stack statements? No more than two standalone one-sentence paragraphs?
-9. Anti-AI checklist clean?
-10. `npm run format:fix` run?
+9. Does every `, and` name a real relationship, or should it be `because` / `when` / `while` / a full stop? Any sentence with two of them?
+10. Read aloud: any three sentences in a row opening the same way?
+11. Anti-AI checklist clean?
+12. `npm run format:fix` run?
